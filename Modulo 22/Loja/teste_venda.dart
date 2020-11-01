@@ -11,7 +11,7 @@ main() {
   telaInicial();
 
   //Lista de vendas realizadas
-  List<Venda> venda;
+  List<Venda> venda = [];
 
   List<VendaItem> nota = carrinho(prods());
 
