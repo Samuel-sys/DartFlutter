@@ -10,26 +10,33 @@ main() {
   telaInicial();
 
   //Lista de vendas realizadas
-  List<Venda> venda = [];
+  List<Venda> historicoDeVendas = [];
+  //var com os produtos cadastrados
+  var listaDeCompras = nota();
 
-  var a = nota();
-
+  //loop de repetição para controlar a UI (o sistema so se encerra quando o cliente digitar sair)
   while (func.toLowerCase() != "sair") {
-    List<VendaItem> notaFiscal = a();
+    //registra os itens comprados pelo usuario e o valor de cada um deles
+    List<VendaItem> notaFiscal = listaDeCompras();
 
+    //cadastra o cliente como um objeto
     Cliente cliente = cadastraCliente();
 
-    venda.add(Venda(cliente: cliente, itens: notaFiscal));
+    //adiciona a venda no historico de vendas
+    historicoDeVendas.add(Venda(cliente: cliente, itens: notaFiscal));
 
+    //pergunta se o usuario quer sair do sistema
     print("Para sair e ver todas as compra feitas escreva \"SAIR\"");
     func = stdin.readLineSync();
   }
-  //estava pensando em fazer uma lista de vendas feitas mas por enquanto fica assim
-  print(venda
+  //mostra todas as compra que foram feitas no sistema
+  print(historicoDeVendas
       .toString()
       .replaceAll("[", "")
       .replaceAll("]", "")
       .replaceAll("\n, ", "\n"));
+
+  //print(historicoDeVendas.reduce((a, e) => a.valorTotal));
 }
 
 Cliente cadastraCliente() {
@@ -73,37 +80,33 @@ List<VendaItem> Function() nota() {
   return () {
     var func = "";
     List<VendaItem> carrinho = [];
-    VendaItem prodEscolhidos = new VendaItem();
 
     while (func.toLowerCase() != "sair") {
+      VendaItem item = new VendaItem();
       //pede o codigo do item a ser comprado
       stdout.write("Codigo de item a ser comprado:");
       int cod = int.parse(stdin.readLineSync());
 
-      if (cod > listaProd.length) {
+      if (cod > listaProd.length || cod <= 0) {
         print("Codigo invalido!!");
       } else {
-        stdout.write("Quantidade: ");
-        int qtd = int.parse(stdin.readLineSync());
+        //cria um objeto com os valores do produto escolhido
+        Produto produtoEscolhido = null;
+        produtoEscolhido = listaProd[cod - 1];
 
-        prodEscolhidos.quantidade = qtd;
+        stdout.write("Quantidade: ");
+        //registra a quantidade de itens comprados
+        item.quantidade = int.parse(stdin.readLineSync());
 
         stdout.write("Desconto: ");
-        double desconto = double.parse(stdin.readLineSync());
-
-        listaProd[cod - 1].desconto = desconto;
-
-        //conforme o codigo adiciona o item ao objeto que sera adicionado ao carrinho
-        prodEscolhidos.produto = listaProd[cod - 1];
-        double a = (listaProd[cod - 1].precoComDesconto * qtd);
-        prodEscolhidos.preco = a;
-        print(a);
-        print("Aki ${prodEscolhidos.preco}");
+        produtoEscolhido.desconto = double.parse(stdin.readLineSync());
 
         // print(prodEscolhidos.preco);
         // print(listaProd[cod - 1].preco * qtd);
 
-        carrinho.add(prodEscolhidos);
+        print(produtoEscolhido);
+        item.produto = produtoEscolhido;
+        carrinho.add(item);
 
         print("\nDeseja sair ? digite sair");
         func = stdin.readLineSync();
@@ -111,8 +114,8 @@ List<VendaItem> Function() nota() {
     }
 
     //mostra a lista de compra
-    print("\nLista de compra\n" +
-        "===========================================================================================================" +
+    print("\nLista de compra\n");
+    print("===========================================================================================================" +
         "\n${carrinho.toString().replaceAll("[", "").replaceAll("]", "").replaceAll("\n, ", "\n")}" +
         "===========================================================================================================");
 

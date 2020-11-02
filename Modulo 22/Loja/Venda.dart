@@ -9,7 +9,7 @@ class Venda {
 
   double get valorTotal {
     return itens
-        .map((item) => item.preco * item.quantidade)
+        .map((item) => item.produto.preco * item.quantidade)
         .reduce((a, t) => a + t);
   }
 
@@ -17,6 +17,7 @@ class Venda {
     return cliente.toString() +
         "\n===========================================================\n" +
         itens.toString() +
+        "\nTotal: $valorTotal" +
         "\n===========================================================\n\n";
   }
 }
