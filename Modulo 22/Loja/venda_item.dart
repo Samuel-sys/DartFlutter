@@ -17,6 +17,7 @@ class VendaItem {
   void set preco(double novoPreco) {
     if (novoPreco > 0) {
       this._preco = novoPreco;
+      print("foi val: $novoPreco");
     }
   }
 

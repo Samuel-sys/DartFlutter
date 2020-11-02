@@ -1,29 +1,35 @@
 import 'dart:io';
 import './produto.dart';
 import './venda_item.dart';
-import 'Venda.dart';
-import 'cliente.dart';
+import './Venda.dart';
+import './cliente.dart';
 
 main() {
-  // var func = "";
-
+  var func = "";
   //apresenta o logotipo da empresa
   telaInicial();
 
   //Lista de vendas realizadas
   List<Venda> venda = [];
 
-  List<VendaItem> nota = carrinho(prods());
+  var a = nota();
 
-  Cliente cliente = cadastraCliente();
+  while (func.toLowerCase() != "sair") {
+    List<VendaItem> notaFiscal = a();
 
-  venda.add(Venda(cliente: cliente, itens: nota));
+    Cliente cliente = cadastraCliente();
 
-  // print("Para sair e ver todas as compra feitas escreva \"SAIR\"");
-  // func = stdin.readLineSync();
+    venda.add(Venda(cliente: cliente, itens: notaFiscal));
 
+    print("Para sair e ver todas as compra feitas escreva \"SAIR\"");
+    func = stdin.readLineSync();
+  }
   //estava pensando em fazer uma lista de vendas feitas mas por enquanto fica assim
-  print(venda.toString());
+  print(venda
+      .toString()
+      .replaceAll("[", "")
+      .replaceAll("]", "")
+      .replaceAll("\n, ", "\n"));
 }
 
 Cliente cadastraCliente() {
@@ -49,7 +55,7 @@ void telaInicial() {
       "===================================================================");
 }
 
-List<Produto> prods() {
+List<VendaItem> Function() nota() {
   List<Produto> listaProd = [];
   listaProd.add(new Produto(nome: 'Arroz roxo', preco: 15.00, codigo: 1));
   listaProd.add(new Produto(nome: 'Feijão roxo', preco: 20.80, codigo: 2));
@@ -58,50 +64,58 @@ List<Produto> prods() {
   listaProd.add(new Produto(nome: 'Batata palha roxo', preco: 5.19, codigo: 5));
   // listaProd.add(new Produto(nome: 'teste', preco: 5, codigo: 6));
 
-  print(listaProd.toString());
+  print(listaProd
+      .toString()
+      .replaceAll("[", "")
+      .replaceAll("]", "")
+      .replaceAll("\n, ", "\n"));
 
-  return listaProd;
-}
+  return () {
+    var func = "";
+    List<VendaItem> carrinho = [];
+    VendaItem prodEscolhidos = new VendaItem();
 
-List<VendaItem> carrinho(List<Produto> listaProd) {
-  var func = "";
-  List<VendaItem> carrinho = [];
-  VendaItem prodEscolhidos = new VendaItem();
+    while (func.toLowerCase() != "sair") {
+      //pede o codigo do item a ser comprado
+      stdout.write("Codigo de item a ser comprado:");
+      int cod = int.parse(stdin.readLineSync());
 
-  while (func.toLowerCase() != "sair") {
-    //pede o codigo do item a ser comprado
-    stdout.write("Codigo de item a ser comprado:");
-    int cod = int.parse(stdin.readLineSync());
+      if (cod > listaProd.length) {
+        print("Codigo invalido!!");
+      } else {
+        stdout.write("Quantidade: ");
+        int qtd = int.parse(stdin.readLineSync());
 
-    if (cod > listaProd.length) {
-      print("Codigo invalido!!");
-    } else {
-      stdout.write("Quantidade: ");
-      int qtd = int.parse(stdin.readLineSync());
+        prodEscolhidos.quantidade = qtd;
 
-      prodEscolhidos.quantidade = qtd;
+        stdout.write("Desconto: ");
+        double desconto = double.parse(stdin.readLineSync());
 
-      stdout.write("Desconto: ");
-      double desconto = double.parse(stdin.readLineSync());
+        listaProd[cod - 1].desconto = desconto;
 
-      listaProd[cod - 1].desconto = desconto;
+        //conforme o codigo adiciona o item ao objeto que sera adicionado ao carrinho
+        prodEscolhidos.produto = listaProd[cod - 1];
+        double a = (listaProd[cod - 1].precoComDesconto * qtd);
+        prodEscolhidos.preco = a;
+        print(a);
+        print("Aki ${prodEscolhidos.preco}");
 
-      //conforme o codigo adiciona o item ao objeto que sera adicionado ao carrinho
-      prodEscolhidos.produto = listaProd[cod - 1];
-      prodEscolhidos.preco = listaProd[cod - 1].precoComDesconto * qtd;
+        // print(prodEscolhidos.preco);
+        // print(listaProd[cod - 1].preco * qtd);
 
-      print(prodEscolhidos.preco * qtd);
+        carrinho.add(prodEscolhidos);
 
-      carrinho.add(prodEscolhidos);
-
-      print("\nDeseja sair ? digite sair");
-      func = stdin.readLineSync();
+        print("\nDeseja sair ? digite sair");
+        func = stdin.readLineSync();
+      }
     }
-  }
 
-  //mostra a lista de compra
-  print("\nLista de compra\n" +
-      "======================================================================================" +
-      "\n${carrinho.toString()}" +
-      "======================================================================================");
+    //mostra a lista de compra
+    print("\nLista de compra\n" +
+        "===========================================================================================================" +
+        "\n${carrinho.toString().replaceAll("[", "").replaceAll("]", "").replaceAll("\n, ", "\n")}" +
+        "===========================================================================================================");
+
+    return carrinho;
+  };
 }
