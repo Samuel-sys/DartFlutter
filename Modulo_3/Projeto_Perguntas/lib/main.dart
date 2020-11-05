@@ -7,6 +7,26 @@ main() => runApp(new PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+  //Lista com todos os dados a serem manipulados no sistema
+  final _perguntas = const [
+    {
+      //o texto a ser apresentado no topo do App com a pergunta
+      "texto": "Qual é a sua cor favorita?",
+
+      //o texto de cada botão a ser apresentado como possivel respota
+      "resposta": ["Azul", "Verde", "Amarelo", "Preto"],
+    },
+    {
+      "texto": "Qual é o seu animal favorita?",
+      "resposta": ["Coelho", "Elefante", "Cobra", "Leão"],
+    },
+    {
+      "texto": "Qual é o seu instrutor favorita?",
+      "resposta": ["Maria", "João", "Leo", "Pedro"],
+    },
+  ];
+
+  bool get temPerguntaSelecionada => _perguntaSelecionada < _perguntas.length;
 
   void _responder() {
     //atualiza o state da pagina do sistema
@@ -16,37 +36,11 @@ class _PerguntaAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-    //Lista com todos os dados a serem manipulados no sistema
-    final List<Map<String, Object>> perguntas = [
-      {
-        //o texto a ser apresentado no topo do App com a pergunta
-        "texto": "Qual é a sua cor favorita?",
+    //lista com as respostas da pergunta selecionada
+    List<String> respostas = temPerguntaSelecionada
+        ? _perguntas[_perguntaSelecionada]["resposta"]
+        : null;
 
-        //o texto de cada botão a ser apresentado como possivel respota
-        "resposta": ["Azul", "Verde", "Amarelo", "Preto"],
-      },
-      {
-        "texto": "Qual é o seu animal favorita?",
-        "resposta": ["Coelho", "Elefante", "Cobra", "Leão"],
-      },
-      {
-        "texto": "Qual é o seu instrutor favorita?",
-        "resposta": ["Maria", "João", "Leo", "Pedro"],
-      },
-    ];
-
-    //lista com Widgets do butão com as opções das possiveis respostas
-    List<Widget> respostas = [];
-
-    //ele cria um botão para cadas alternativel possivel no questionario atual
-    for (var resp in perguntas[_perguntaSelecionada]["resposta"]) {
-      //adiciona um botão a lista
-      respostas.add(Resposta(
-        texto: resp, //coloca como texto o item na lista encontrada
-        funcao:
-            _responder, //função que envia o parametro para se saber em que questão estamos
-      ));
-    }
     return MaterialApp(
       home: Scaffold(
         /****cabeçalho do app****/
@@ -55,10 +49,21 @@ class _PerguntaAppState extends State<PerguntaApp> {
         ), //
 
         /****corpo do app****/
-        body: Column(children: <Widget>[
-          Text(perguntas[_perguntaSelecionada]["texto"]),
-          ...respostas, //lista de widget com todos os botões de respostas
-        ]),
+        body:
+            //se a pergunta selecionada existir ele cria o corpo do app
+            temPerguntaSelecionada
+                ? Column(children: <Widget>[
+                    Questao(_perguntas[_perguntaSelecionada]["texto"]),
+                    //apresenta todos os elementos na lista de Widget com os dados entregues
+                    ...respostas.map((resp) {
+                      //criamos um Widget Resposta com os dados das possíveis resposta
+                      return Resposta(
+                        texto: resp,
+                        funcao: _responder,
+                      );
+                    }).toList(), //convertemos o valor em um formato List
+                  ])
+                : null, //se não houver pergunta selecionada ele não cria o corpo do app
       ), //
     );
   }
