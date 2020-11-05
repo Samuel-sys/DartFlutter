@@ -16,7 +16,10 @@ class _PerguntaAppState extends State<PerguntaApp> {
         perguntas.somaPontuacao(pontuacao);
       });
     }
-    print(perguntas.pontuacao);
+  }
+
+  void _reiniciaQuestionario() {
+    setState(perguntas.retornaQuestionario);
   }
 
   @override
@@ -35,7 +38,10 @@ class _PerguntaAppState extends State<PerguntaApp> {
                 respostas: perguntas.respostas,
                 funcao: _responder,
               )
-            : Resultado(),
+            : Resultado(
+                pontuacao: perguntas.pontuacao,
+                function: _reiniciaQuestionario,
+              ),
       ),
     );
   }

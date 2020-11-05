@@ -47,6 +47,11 @@ class Perguntas {
 
   void proximaPergunta() => this._posicao++;
 
+  void retornaQuestionario() {
+    this._posicao = 0;
+    this._pontuacao = 0;
+  }
+
   String get perguntas {
     return _perguntas[this._posicao]["texto"];
   }
