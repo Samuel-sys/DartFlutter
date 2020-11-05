@@ -41,30 +41,36 @@ class _PerguntaAppState extends State<PerguntaApp> {
         ? _perguntas[_perguntaSelecionada]["resposta"]
         : null;
 
+    //var com a construção do Widgets responsáveis pelos questionarios do App
+    var questionario = Column(children: <Widget>[
+      Questao(_perguntas[_perguntaSelecionada]["texto"]),
+      //apresenta todos os elementos na lista de Widget com os dados entregues
+      ...respostas.map((resp) {
+        //criamos um Widget Resposta com os dados das possíveis resposta
+        return Resposta(
+          texto: resp,
+          funcao: _responder,
+        );
+      }).toList(), //convertemos o valor em um formato List
+    ]);
+
+    //var com a construção do Widgets responsavis pela apresentação do resultado do questionarios feito
+    var resultado = Center(
+      child: Text(
+        "Parabens",
+        style: TextStyle(fontSize: 28),
+      ),
+    );
+
     return MaterialApp(
       home: Scaffold(
-        /****cabeçalho do app****/
-        appBar: AppBar(
-          title: Text("Perguntas"),
-        ), //
+          /****cabeçalho do app****/
+          appBar: AppBar(
+            title: Text("Perguntas"),
+          ), //
 
-        /****corpo do app****/
-        body:
-            //se a pergunta selecionada existir ele cria o corpo do app
-            temPerguntaSelecionada
-                ? Column(children: <Widget>[
-                    Questao(_perguntas[_perguntaSelecionada]["texto"]),
-                    //apresenta todos os elementos na lista de Widget com os dados entregues
-                    ...respostas.map((resp) {
-                      //criamos um Widget Resposta com os dados das possíveis resposta
-                      return Resposta(
-                        texto: resp,
-                        funcao: _responder,
-                      );
-                    }).toList(), //convertemos o valor em um formato List
-                  ])
-                : null, //se não houver pergunta selecionada ele não cria o corpo do app
-      ), //
+          /****corpo do app****/
+          body: temPerguntaSelecionada ? questionario : resultado),
     );
   }
 }
