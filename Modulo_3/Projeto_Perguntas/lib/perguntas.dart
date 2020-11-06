@@ -1,4 +1,5 @@
 class Perguntas {
+  //Lista de Perguntas e alternativas de respostas e das pontuações conforme as respostas
   final _perguntas = const [
     {
       //o texto a ser apresentado no topo do App com a pergunta
@@ -32,31 +33,34 @@ class Perguntas {
     },
   ];
 
-  int _posicao = 0;
-  int _pontuacao = 0;
+  //Variaveis
+  int _posicao = 0; //informa em que posição da lista (pergunta) ele esta
+  int _pontuacao = 0; //informa a pontuação que o usuario tem
 
-  bool get temPerguntaSelecionada {
-    return _posicao < _perguntas.length;
-  }
-
+  //informa a posição da lista que deseja ser consultada
   set posicao(int posicaoList) => this._posicao = posicaoList;
-  int get posicao => this._posicao;
+  int get posicao => this._posicao; //informa em que posição a lista esta
+  void proximaPergunta() =>
+      this._posicao++; //adiciona 1 a variavel assim levando a proxima questão
 
+  //soma a pontuação do usuario com o novo valor
   void somaPontuacao(int pontos) => _pontuacao += pontos;
-  get pontuacao => _pontuacao;
+  get pontuacao => _pontuacao; //informa quantos pontos o usuario fez
 
-  void proximaPergunta() => this._posicao++;
+  //retorna um valor Booleano informando que se tiver mais uma pergunta (item na lista)
+  //tem mais uma pergunta = true
+  //não tem mais perguntas = false
+  bool get temPerguntaSelecionada => _posicao < _perguntas.length;
 
+  //zera as variaveis para voltar aos parametros iniciais
   void retornaQuestionario() {
     this._posicao = 0;
     this._pontuacao = 0;
   }
 
-  String get perguntas {
-    return _perguntas[this._posicao]["texto"];
-  }
+  //retorna apenas a pergunta
+  String get perguntas => _perguntas[this._posicao]["texto"];
 
-  List get respostas {
-    return _perguntas[this._posicao]["resposta"];
-  }
+  //retorna uma lista de alternativas de posiveis respostas da pergunta
+  List get respostas => _perguntas[this._posicao]["resposta"];
 }
