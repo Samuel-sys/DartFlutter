@@ -24,13 +24,18 @@ class MyHomePage extends StatelessWidget {
 
         //corpo
         body: Column(
+          //o padrão do mainAxisAlignment tem como padrão o parametro start
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+          //preenche todo o width da coluna (Column)
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+
           //O children diferente do child aceita
           //mais de um componete (mais de uma linha ou coluna etc)
           children: <Widget>[
             //por não ter uma definção do comprimeto da coluna (width) a Column
             //pega como parametro de width o elemento que tiver o maior width
             Container(
-              width: double.infinity,
               child: Card(
                 child: Text("Grafico"),
                 elevation: 5,
