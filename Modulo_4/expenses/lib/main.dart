@@ -17,22 +17,30 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //cabeçalho
-      appBar: AppBar(
-        title: Text("Exepenses"),
-      ),
-
-      //corpo
-      body:
-          //centralizando os componentes do corpo do App na tela
-          Center(
-        child: Text(
-          "Verção inicial",
-          style: TextStyle(
-            fontSize: 50,
-          ),
+        //cabeçalho
+        appBar: AppBar(
+          title: Text("Exepenses"),
         ),
-      ),
-    );
+
+        //corpo
+        body: Column(
+          //O children diferente do child aceita
+          //mais de um componete (mais de uma linha ou coluna etc)
+          children: <Widget>[
+            //por não ter uma definção do comprimeto da coluna (width) a Column
+            //pega como parametro de width o elemento que tiver o maior width
+            Container(
+              width: double.infinity,
+              child: Card(
+                child: Text("Grafico"),
+                elevation: 5,
+              ),
+            ),
+            Card(
+              child: Text("Lista de Transações"),
+              elevation: 5,
+            )
+          ],
+        ));
   }
 }
