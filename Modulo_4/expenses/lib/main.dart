@@ -71,7 +71,26 @@ class MyHomePage extends StatelessWidget {
                 return Card(
                     child: Row(
                   children: [
+                    //apresenta o valor da transação
                     Container(
+                      //Adicionando margin ao container que irá apresentar
+                      //o valor das transferências realizadas
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 10,
+                      ),
+
+                      //decorando a Caixa que apresenta o preço do produto
+                      decoration: BoxDecoration(
+                        //decorando a borda da Caixa
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2,
+                        ),
+                      ),
+
+                      //espaçamento entre os Elementos
+                      padding: EdgeInsets.all(10),
                       child: Text(
                         tr.value.toString(),
                       ),
