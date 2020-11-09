@@ -99,10 +99,26 @@ class MyHomePage extends StatelessWidget {
                             color: Colors.purple),
                       ),
                     ),
+
                     Column(
+                      //=========Titulo da Transferencia
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(tr.title),
-                        Text(tr.date.toString()),
+                        Text(
+                          tr.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+
+                        //========Data da transferencia
+                        Text(
+                          "${tr.date.day.toString().padLeft(2, '0')}/${tr.date.month.toString().padLeft(2, '0')}/${tr.date.year}",
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     )
                   ],
