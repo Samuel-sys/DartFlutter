@@ -84,7 +84,7 @@ class MyHomePage extends StatelessWidget {
                       decoration: BoxDecoration(
                         //decorando a borda da Caixa
                         border: Border.all(
-                          color: Colors.black,
+                          color: Colors.purple,
                           width: 2,
                         ),
                       ),
@@ -93,13 +93,16 @@ class MyHomePage extends StatelessWidget {
                       padding: EdgeInsets.all(10),
                       child: Text(
                         tr.value.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, //negrito
+                            fontSize: 20,
+                            color: Colors.purple),
                       ),
                     ),
                     Column(
                       children: <Widget>[
                         Text(tr.title),
-                        Text(
-                            "${tr.date.day.toString()}/${tr.date.month.toString()}/${tr.date.year.toString()}"),
+                        Text(tr.date.toString()),
                       ],
                     )
                   ],
