@@ -31,7 +31,7 @@ class MyHomePage extends StatelessWidget {
       title: 'Conta de Luz',
       value: 211.30,
       date: DateTime.now(),
-    )
+    ),
   ];
 
   @override
@@ -61,9 +61,31 @@ class MyHomePage extends StatelessWidget {
                 elevation: 5,
               ),
             ),
-            Card(
-              child: Text("Lista de Transações"),
-              elevation: 5,
+
+            //Columns de transferencias realizadas
+            Column(
+              children:
+                  //List responsável por apresentar todos os objetos de tranferencia
+                  _transaction.map((tr) {
+                //manipulando os dado do Objeto Transaction
+                return Card(
+                    child: Row(
+                  children: [
+                    Container(
+                      child: Text(
+                        tr.value.toString(),
+                      ),
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(tr.title),
+                        Text(
+                            "${tr.date.day.toString()}/${tr.date.month.toString()}/${tr.date.year.toString()}"),
+                      ],
+                    )
+                  ],
+                ));
+              }).toList(), //converte para um List<Widget>
             )
           ],
         ));
