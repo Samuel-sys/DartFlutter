@@ -12,6 +12,26 @@ class ExpensesApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
+        fontFamily: "Quicksand",
+
+        //padrão de estilo do headline6
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                fontFamily: 'OpenSans',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        //padrão de estilo do AppBar
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+        ),
       ),
       //estamos fazendo com que a class MyHomePage seja o componete que define
       //como sera a tela de inicio (home)
@@ -26,22 +46,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _transaction = [
-    //Tênis
-    Transaction(
-      id: "t1",
-      title: 'Novo tênis de Corrida',
-      value: 310.76,
-      date: DateTime.now(),
-    ),
+  final List<Transaction> _transaction = [
+    // //Tênis
+    // Transaction(
+    //   id: "t1",
+    //   title: 'Novo tênis de Corrida',
+    //   value: 310.76,
+    //   date: DateTime.now(),
+    // ),
 
-    //Conta de Luz
-    Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
-      value: 211.30,
-      date: DateTime.now(),
-    ),
+    // //Conta de Luz
+    // Transaction(
+    //   id: 't2',
+    //   title: 'Conta de Luz',
+    //   value: 211.30,
+    //   date: DateTime.now(),
+    // ),
   ];
 
   void _adiconarTransaction(String title, double value) {

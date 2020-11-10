@@ -58,10 +58,8 @@ class TransactionList extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     tr.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    //define como estilo o padrão informado no MaterialApp
+                    style: Theme.of(context).textTheme.headline6,
                   ),
 
                   //========Data da transferencia
