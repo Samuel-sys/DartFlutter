@@ -28,7 +28,7 @@ class _TransactionUserState extends State<TransactionUser> {
     ),
   ];
 
-  void adiconarTransaction(String title, double value) {
+  void _adiconarTransaction(String title, double value) {
     final newTransactio = Transaction(
       id: "",
       title: title,
@@ -49,7 +49,7 @@ class _TransactionUserState extends State<TransactionUser> {
         TransactionList(_transaction),
 
         //Form de cadastro de Transação
-        TransactionForm(function: adiconarTransaction),
+        TransactionForm(onSubmit: _adiconarTransaction),
       ],
     );
   }
