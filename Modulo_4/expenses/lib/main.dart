@@ -24,24 +24,27 @@ class MyHomePage extends StatelessWidget {
       ),
 
       //corpo
-      body: Column(
-        //preenche todo o width da coluna (Column)
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: SingleChildScrollView(
+        //permite que a minha pagina tenha um scroll
+        child: Column(
+          //preenche todo o width da coluna (Column)
+          crossAxisAlignment: CrossAxisAlignment.stretch,
 
-        //O children diferente do child aceita
-        //mais de um componete (mais de uma linha ou coluna etc)
-        children: <Widget>[
-          //por não ter uma definção do comprimeto da coluna (width) a Column
-          //pega como parametro de width o elemento que tiver o maior width
-          Container(
-            child: Card(
-              child: Text("Grafico"),
-              elevation: 5,
+          //O children diferente do child aceita
+          //mais de um componete (mais de uma linha ou coluna etc)
+          children: <Widget>[
+            //por não ter uma definção do comprimeto da coluna (width) a Column
+            //pega como parametro de width o elemento que tiver o maior width
+            Container(
+              child: Card(
+                child: Text("Grafico"),
+                elevation: 5,
+              ),
             ),
-          ),
 
-          TransactionUser(), //TransactionList e TransactionForm = TransactionUser
-        ],
+            TransactionUser(), //TransactionList e TransactionForm = TransactionUser
+          ],
+        ),
       ),
     );
   }
