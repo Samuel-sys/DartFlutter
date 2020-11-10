@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'components/transaction_user.dart';
+import 'components/transaction_form.dart';
+import 'components/transaction_list.dart';
+import 'models/transaction.dart';
 
 main() => runApp(ExpensesApp());
 
@@ -14,13 +16,64 @@ class ExpensesApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final _transaction = [
+    //Tênis
+    Transaction(
+      id: "t1",
+      title: 'Novo tênis de Corrida',
+      value: 310.76,
+      date: DateTime.now(),
+    ),
+
+    //Conta de Luz
+    Transaction(
+      id: 't2',
+      title: 'Conta de Luz',
+      value: 211.30,
+      date: DateTime.now(),
+    ),
+  ];
+
+  void _adiconarTransaction(String title, double value) {
+    final newTransactio = Transaction(
+      id: "",
+      title: title,
+      value: value,
+      date: DateTime.now(),
+    );
+
+    setState(() {
+      _transaction.add(newTransactio);
+    });
+  }
+
+  _openTransactioFormModal(BuildContext context) {
+    //Cria uma mine janela com o form de cadastro de transferencia
+    showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return TransactionForm(onSubmit: _adiconarTransaction);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //cabeçalho
       appBar: AppBar(
         title: Text("Exepenses"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => _openTransactioFormModal(context),
+          ),
+        ],
       ),
 
       //corpo
@@ -33,8 +86,6 @@ class MyHomePage extends StatelessWidget {
           //O children diferente do child aceita
           //mais de um componete (mais de uma linha ou coluna etc)
           children: <Widget>[
-            //por não ter uma definção do comprimeto da coluna (width) a Column
-            //pega como parametro de width o elemento que tiver o maior width
             Container(
               child: Card(
                 child: Text("Grafico"),
@@ -42,10 +93,17 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
 
-            TransactionUser(), //TransactionList e TransactionForm = TransactionUser
+            //Lista de Tranferencias execultadas
+            TransactionList(_transaction),
+//
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _openTransactioFormModal(context),
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
