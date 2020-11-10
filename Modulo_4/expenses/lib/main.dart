@@ -9,6 +9,10 @@ class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amber,
+      ),
       //estamos fazendo com que a class MyHomePage seja o componete que define
       //como sera a tela de inicio (home)
       home: MyHomePage(),
@@ -51,6 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transaction.add(newTransactio);
     });
+
+    //fecha a o modal do TrasactionForm depois de salvar a newTransaction
+    Navigator.of(context).pop();
   }
 
   _openTransactioFormModal(BuildContext context) {

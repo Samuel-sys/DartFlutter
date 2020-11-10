@@ -34,7 +34,8 @@ class TransactionList extends StatelessWidget {
                 decoration: BoxDecoration(
                   //decorando a borda da Caixa
                   border: Border.all(
-                    color: Colors.purple,
+                    //pega a cor definida como pricipal no tema do MaterialApp
+                    color: Theme.of(context).primaryColor,
                     width: 2,
                   ),
                 ),
@@ -44,9 +45,10 @@ class TransactionList extends StatelessWidget {
                 child: Text(
                   "R\$ ${tr.value.toStringAsFixed(2)}",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, //negrito
-                      fontSize: 20,
-                      color: Colors.purple),
+                    fontWeight: FontWeight.bold, //negrito
+                    fontSize: 20,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
 
