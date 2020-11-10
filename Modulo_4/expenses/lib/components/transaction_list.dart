@@ -11,70 +11,88 @@ class TransactionList extends StatelessWidget {
     return //Columns de transferencias realizadas
         Container(
       height: 300, //defino o tamanho do container da Lista de Tranferencias
-      child: ListView.builder(
-        //apresenta a quantidade de itens dentro da List
-        itemCount: transactions.length,
-
-        itemBuilder: (ctx, index) {
-          final tr = transactions[index];
-//manipulando os dado do Objeto Transaction
-          return Card(
-              child: Row(
-            children: [
-              //apresenta o valor da transação
-              Container(
-                //Adicionando margin ao container que irá apresentar
-                //o valor das transferências realizadas
-                margin: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
+      child: transactions.isEmpty
+          ? Column(
+              //subistitui o SizedBox() utilizado na aula
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(
+                  "Nada cadastrado",
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-
-                //decorando a Caixa que apresenta o preço do produto
-                decoration: BoxDecoration(
-                  //decorando a borda da Caixa
-                  border: Border.all(
-                    //pega a cor definida como pricipal no tema do MaterialApp
-                    color: Theme.of(context).primaryColor,
-                    width: 2,
+                Container(
+                  height: 200, //altura da imagem
+                  child: Image.asset(
+                    "lib/assets/images/waiting.png", //endereco da imagem
+                    fit: BoxFit.cover,
                   ),
-                ),
+                )
+              ],
+            )
+          : ListView.builder(
+              //apresenta a quantidade de itens dentro da List
+              itemCount: transactions.length,
 
-                //espaçamento entre os Elementos
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "R\$ ${tr.value.toStringAsFixed(2)}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold, //negrito
-                    fontSize: 20,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ),
+              itemBuilder: (ctx, index) {
+                final tr = transactions[index];
+                return Card(
+                    child: Row(
+                  children: [
+                    //apresenta o valor da transação
+                    Container(
+                      //Adicionando margin ao container que irá apresentar
+                      //o valor das transferências realizadas
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 10,
+                      ),
 
-              Column(
-                //=========Titulo da Transferencia
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    tr.title,
-                    //define como estilo o padrão informado no MaterialApp
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                      //decorando a Caixa que apresenta o preço do produto
+                      decoration: BoxDecoration(
+                        //decorando a borda da Caixa
+                        border: Border.all(
+                          //pega a cor definida como pricipal no tema do MaterialApp
+                          color: Theme.of(context).primaryColor,
+                          width: 2,
+                        ),
+                      ),
 
-                  //========Data da transferencia
-                  Text(
-                    DateFormat('d MMM y').format(tr.date),
-                    style: TextStyle(
-                      color: Colors.grey,
+                      //espaçamento entre os Elementos
+                      padding: EdgeInsets.all(10),
+                      //==============Valor Transferencia
+                      child: Text(
+                        "R\$ ${tr.value.toStringAsFixed(2)}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, //negrito
+                          fontSize: 20,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ));
-        },
-      ),
+
+                    Column(
+                      //=========Titulo da Transferencia
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          tr.title,
+                          //define como estilo o padrão informado no MaterialApp
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+
+                        //========Data da transferencia
+                        Text(
+                          DateFormat('d MMM y').format(tr.date),
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ));
+              },
+            ),
     );
   }
 }
