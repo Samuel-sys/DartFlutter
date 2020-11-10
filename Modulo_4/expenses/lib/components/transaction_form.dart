@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class TransactionForm extends StatelessWidget {
   final titleController = TextEditingController();
   final valueController = TextEditingController();
+  final Function(String, double) function;
+
+  TransactionForm({@required this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,9 @@ class TransactionForm extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             FlatButton(
               onPressed: () {
-                print(this.titleController.text);
-                print(this.valueController.text);
+                //essa function ira adicionar a nova transação a lista
+                function(this.titleController.text,
+                    double.parse(this.valueController.text));
               },
               child: Text(
                 "Nova Transação",

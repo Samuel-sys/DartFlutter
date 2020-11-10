@@ -28,6 +28,19 @@ class _TransactionUserState extends State<TransactionUser> {
     ),
   ];
 
+  void adiconarTransaction(String title, double value) {
+    final newTransactio = Transaction(
+      id: "",
+      title: title,
+      value: value,
+      date: DateTime.now(),
+    );
+
+    setState(() {
+      _transaction.add(newTransactio);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +49,7 @@ class _TransactionUserState extends State<TransactionUser> {
         TransactionList(_transaction),
 
         //Form de cadastro de Transação
-        TransactionForm(),
+        TransactionForm(function: adiconarTransaction),
       ],
     );
   }
