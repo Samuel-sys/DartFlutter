@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
-class TransactionForm extends StatelessWidget {
-  final titleController = TextEditingController();
-  final valueController = TextEditingController();
-  // final dateController = TextEditingController();
-
+class TransactionForm extends StatefulWidget {
   final void Function(String, double) onSubmit;
 
   TransactionForm({@required this.onSubmit});
+
+  @override
+  _TransactionFormState createState() => _TransactionFormState();
+}
+
+class _TransactionFormState extends State<TransactionForm> {
+  final titleController = TextEditingController();
+
+  final valueController = TextEditingController();
 
   _submitForm() {
     //armazena o titulo da transação a variavel
@@ -23,7 +28,7 @@ class TransactionForm extends StatelessWidget {
     }
 
     //essa function ira adicionar a nova transação a lista
-    onSubmit(title, value);
+    widget.onSubmit(title, value);
   }
 
   @override
