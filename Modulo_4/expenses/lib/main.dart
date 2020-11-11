@@ -59,9 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
   //       return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
   //     }).toList();
 
-  void _delete(String id) {
+  void _deleteTransaction(String id) {
     setState(() {
-      this._transaction = this._transaction.where((e) => e.id != id).toList();
+      //toda Transaction que tiver o ID diferente do que foi selecionado pelo
+      //usuario se mantem na lista
+      this._transaction.removeWhere((e) => e.id == id);
     });
   }
 
@@ -122,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             //Lista de Tranferencias execultadas
-            TransactionList(_transaction, _delete),
+            TransactionList(_transaction, _deleteTransaction),
 //
           ],
         ),
