@@ -47,9 +47,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transaction =
-      //coloquei a lista de transactions na class Transaction
-      Transaction.listaTransactions();
+  final List<Transaction> _transaction = Transaction.listaTransactions();
 
   List<Transaction> get _recentTransactions => this._transaction.where((tr) {
         return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
@@ -106,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
               child: Card(
-                child: Chart(_recentTransactions),
+                child: Chart(this._transaction),
                 elevation: 5,
               ),
             ),
