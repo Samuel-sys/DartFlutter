@@ -32,6 +32,8 @@ class _TransactionFormState extends State<TransactionForm> {
       }
       setState(() {
         this._selectedDate = pinckedDate;
+
+        this._submitForm();
       });
     });
   }
