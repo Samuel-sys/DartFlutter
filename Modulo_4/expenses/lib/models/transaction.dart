@@ -19,15 +19,15 @@ class Transaction {
         Transaction(
           id: "t1",
           title: 'Novo tênis de Corrida',
-          value: 310.76,
-          date: DateTime.now().subtract(Duration(days: 33)),
+          value: 100.00,
+          date: DateTime.now().subtract(Duration(days: 3)),
         ),
 
         //Conta de Luz
         Transaction(
           id: 't2',
           title: 'Conta de Luz',
-          value: 211.30,
+          value: 10.00,
           date: DateTime.now().subtract(Duration(days: 5)),
         ),
       ];
