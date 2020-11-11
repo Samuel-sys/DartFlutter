@@ -17,6 +17,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
   DateTime _selectedDate;
 
+  bool allFilled = false;
+
   //apresenta o datePicker
   void _showDatePicker() {
     showDatePicker(
@@ -47,6 +49,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
     //se um dos valores for invalido ele não efetua o cadastro
     if (title.isEmpty || value <= 0 || data == null) {
+      //informa que ainda existem campos a serem preenchidos
+      setState(() => this.allFilled = true);
       return;
     }
 
@@ -118,6 +122,22 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
               ],
             ),
+
+            //Informa que ainda existem campos a serem preenchidos
+            Expanded(
+              child: this.allFilled
+                  ? Center(
+                      child: Text(
+                        "Preencha todos os campos!",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    )
+                  : Text(""),
+            )
           ],
         ),
       ),

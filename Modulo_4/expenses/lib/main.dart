@@ -51,11 +51,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transaction = Transaction.listaTransactions();
+  final List<Transaction> _transaction = [];
 
-  List<Transaction> get _recentTransactions => this._transaction.where((tr) {
-        return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
-      }).toList();
+  // List<Transaction> get _recentTransactions => this._transaction.where((tr) {
+  //       return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+  //     }).toList();
 
   void _adiconarTransaction(String title, double value, DateTime data) {
     final newTransactio = Transaction(

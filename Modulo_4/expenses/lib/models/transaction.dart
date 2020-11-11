@@ -13,22 +13,4 @@ class Transaction {
       @required this.title,
       @required this.value,
       @required this.date});
-
-  static List<Transaction> listaTransactions() => [
-        //Tênis
-        Transaction(
-          id: "t1",
-          title: 'Novo tênis de Corrida',
-          value: 100.00,
-          date: DateTime.now().subtract(Duration(days: 3)),
-        ),
-
-        //Conta de Luz
-        Transaction(
-          id: 't2',
-          title: 'Conta de Luz',
-          value: 10.00,
-          date: DateTime.now().subtract(Duration(days: 5)),
-        ),
-      ];
 }
