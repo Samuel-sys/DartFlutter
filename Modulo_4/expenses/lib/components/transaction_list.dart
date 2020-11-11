@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function(String) delete;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, this.delete);
   @override
   Widget build(BuildContext context) {
     return //Columns de transferencias realizadas
@@ -58,6 +59,16 @@ class TransactionList extends StatelessWidget {
 
                     //Data da transferencia
                     subtitle: Text(DateFormat('d MMM y').format(tr.date)),
+
+                    trailing: Container(
+                      height: 30,
+                      child: FloatingActionButton(
+                        child: Icon(Icons.delete),
+                        onPressed: () {
+                          delete(tr.id);
+                        },
+                      ),
+                    ),
                   ),
                 );
               },
