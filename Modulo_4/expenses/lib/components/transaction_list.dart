@@ -36,61 +36,30 @@ class TransactionList extends StatelessWidget {
               itemBuilder: (ctx, index) {
                 final tr = transactions[index];
                 return Card(
-                    child: Row(
-                  children: [
-                    //apresenta o valor da transação
-                    Container(
-                      //Adicionando margin ao container que irá apresentar
-                      //o valor das transferências realizadas
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 10,
-                      ),
-
-                      //decorando a Caixa que apresenta o preço do produto
-                      decoration: BoxDecoration(
-                        //decorando a borda da Caixa
-                        border: Border.all(
-                          //pega a cor definida como pricipal no tema do MaterialApp
-                          color: Theme.of(context).primaryColor,
-                          width: 2,
-                        ),
-                      ),
-
-                      //espaçamento entre os Elementos
-                      padding: EdgeInsets.all(10),
-                      //==============Valor Transferencia
-                      child: Text(
-                        "R\$ ${tr.value.toStringAsFixed(2)}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold, //negrito
-                          fontSize: 20,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 5,
+                  ),
+                  child: ListTile(
+                    //Valor da transferencia
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: FittedBox(
+                        child: Text("R\$${tr.value.toStringAsFixed(2)}"),
                       ),
                     ),
 
-                    Column(
-                      //=========Titulo da Transferencia
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          tr.title,
-                          //define como estilo o padrão informado no MaterialApp
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
+                    //Titulo da Transferencia
+                    title: Text(
+                      tr.title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
 
-                        //========Data da transferencia
-                        Text(
-                          DateFormat('d MMM y').format(tr.date),
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ));
+                    //Data da transferencia
+                    subtitle: Text(DateFormat('d MMM y').format(tr.date)),
+                  ),
+                );
               },
             ),
     );
