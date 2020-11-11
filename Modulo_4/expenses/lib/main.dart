@@ -17,12 +17,16 @@ class ExpensesApp extends StatelessWidget {
 
         //padrão de estilo do headline6
         textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            headline6: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
+            button: TextStyle(
+              fontFamily: 'OpenSans',
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            )),
         //padrão de estilo do AppBar
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -53,12 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
         return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
       }).toList();
 
-  void _adiconarTransaction(String title, double value) {
+  void _adiconarTransaction(String title, double value, DateTime data) {
     final newTransactio = Transaction(
       id: "",
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: data,
     );
 
     setState(() {

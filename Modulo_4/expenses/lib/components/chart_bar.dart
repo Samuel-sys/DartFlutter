@@ -16,8 +16,12 @@ class ChartBar extends StatelessWidget {
     return Column(
       children: <Widget>[
         //valor gasto no dia
-        FittedBox(
-          child: Text('${value.toStringAsFixed(2)}'),
+        Container(
+          padding: EdgeInsets.all(1),
+          height: 25,
+          child: FittedBox(
+            child: Text('R\$${value.toStringAsFixed(2)}'),
+          ),
         ),
 
         //espaçameto
