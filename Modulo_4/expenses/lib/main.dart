@@ -51,62 +51,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Transaction> _transaction = [
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "0",
-      title: 'null',
-      value: 5,
-      date: DateTime.now(),
-    ),
-  ];
+  List<Transaction> _transaction = [];
 
   int id = 0;
-
-  // List<Transaction> get _recentTransactions => this._transaction.where((tr) {
-  //       return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
-  //     }).toList();
 
   void _deleteTransaction(String id) {
     setState(() {

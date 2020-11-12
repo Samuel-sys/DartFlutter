@@ -14,14 +14,14 @@ class TransactionList extends StatelessWidget {
       child: transactions.isEmpty
           ? Column(
               //subistitui o SizedBox() utilizado na aula
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Nada cadastrado",
+                  "Nenhuma Transação Cadastrada!",
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Container(
-                  height: 200, //altura da imagem
+                  height: 0.46 * MediaQuery.of(context).size.height,
                   child: Image.asset(
                     "lib/assets/images/waiting.png", //endereco da imagem
                     fit: BoxFit.cover,
