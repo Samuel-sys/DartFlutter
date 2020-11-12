@@ -12,22 +12,31 @@ class TransactionList extends StatelessWidget {
     return //Columns de transferencias realizadas
         Container(
       child: transactions.isEmpty
-          ? Column(
-              //subistitui o SizedBox() utilizado na aula
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Nenhuma Transação Cadastrada!",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Container(
-                  height: 0.46 * MediaQuery.of(context).size.height,
-                  child: Image.asset(
-                    "lib/assets/images/waiting.png", //endereco da imagem
-                    fit: BoxFit.cover,
+          ? LayoutBuilder(
+              builder: (ctx, constraints) {
+                return Center(
+                  child: Column(
+                    //subistitui o SizedBox() utilizado na aula
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(
+                        height: constraints.maxHeight * 0.2,
+                        child: Text(
+                          "Nenhuma Transação Cadastrada!",
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                      Container(
+                        height: 0.7 * constraints.maxHeight,
+                        child: Image.asset(
+                          "lib/assets/images/waiting.png", //endereco da imagem
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
+                );
+              },
             )
           : ListView.builder(
               //apresenta a quantidade de itens dentro da List
@@ -42,27 +51,28 @@ class TransactionList extends StatelessWidget {
                     horizontal: 5,
                   ),
                   child: ListTile(
-                      //Valor da transferencia
-                      leading: CircleAvatar(
-                        radius: 30,
-                        child: FittedBox(
-                          child: Text("R\$${tr.value.toStringAsFixed(2)}"),
-                        ),
+                    //Valor da transferencia
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: FittedBox(
+                        child: Text("R\$${tr.value.toStringAsFixed(2)}"),
                       ),
+                    ),
 
-                      //Titulo da Transferencia
-                      title: Text(
-                        tr.title,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+                    //Titulo da Transferencia
+                    title: Text(
+                      tr.title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
 
-                      //Data da transferencia
-                      subtitle: Text(DateFormat('d MMM y').format(tr.date)),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () => onDelete(tr.id),
-                        color: Theme.of(context).errorColor,
-                      )),
+                    //Data da transferencia
+                    subtitle: Text(DateFormat('d MMM y').format(tr.date)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () => onDelete(tr.id),
+                      color: Theme.of(context).errorColor,
+                    ),
+                  ),
                 );
               },
             ),

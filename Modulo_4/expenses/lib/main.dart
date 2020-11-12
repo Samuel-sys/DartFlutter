@@ -53,16 +53,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Transaction> _transaction = [];
 
+  //responsavel por informa um ID ao item da lista
   int id = 0;
 
-  void _deleteTransaction(String id) {
-    setState(() {
-      //toda Transaction que tiver o ID diferente do que foi selecionado pelo
-      //usuario se mantem na lista
-      this._transaction.removeWhere((e) => e.id == id);
-    });
+  //informa se o usuario deseja ou não ver o grafico
+  bool _showChart = true;
+
+  //Execulta Modal com o form de cadatro de Transaction
+  _openTransactioFormModal(BuildContext context) {
+    //Cria uma mine janela com o form de cadastro de transferencia
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) {
+          return TransactionForm(onSubmit: _adiconarTransaction);
+        });
   }
 
+  //cadastrar transação
   void _adiconarTransaction(String title, double value, DateTime data) {
     final newTransactio = Transaction(
       id: id.toString(),
@@ -71,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
       date: data,
     );
     setState(() {
-      id++;
+      id++; //troca o numero de Id para o proximo cadastro
       _transaction.add(newTransactio);
     });
 
@@ -79,20 +87,30 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _openTransactioFormModal(BuildContext context) {
-    //Cria uma mine janela com o form de cadastro de transferencia
-    showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return TransactionForm(onSubmit: _adiconarTransaction);
-        });
+  //deleta uma transferencia
+  void _deleteTransaction(String id) {
+    setState(() {
+      //toda Transaction que tiver o ID diferente do que foi selecionado pelo
+      //usuario se mantem na lista
+      this._transaction.removeWhere((e) => e.id == id);
+    });
   }
+
+//===========================  Widget  =========================================
 
   @override
   Widget build(BuildContext context) {
+    //o aparelho esta no modo paisagem ? conforme a resposta e dado o valor
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final appBar = AppBar(
       title: Text("Exepenses"),
       actions: <Widget>[
+        IconButton(
+          icon: Icon(_showChart ? Icons.list : Icons.bar_chart),
+          onPressed: () => setState(() => _showChart = !_showChart),
+        ),
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () => _openTransactioFormModal(context),
@@ -100,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
+    //altura da tela disponivel no aparelho (valo 100%)
     final availabelHeight =
         MediaQuery.of(context).size.height - //altura da tela do aparelho
             appBar.preferredSize.height - //altura da appBar
@@ -119,20 +138,25 @@ class _MyHomePageState extends State<MyHomePage> {
           //O children diferente do child aceita
           //mais de um componete (mais de uma linha ou coluna etc)
           children: <Widget>[
-            Container(
-              height: availabelHeight * 0.3,
-              child: Card(
-                child: Chart(this._transaction),
-                elevation: 5,
+            //se estiver no modo paisagem e estiver com a
+            //opção de mostrar grafico ativo
+            if (this._showChart || !isLandscape)
+              //Grafico dos gastos dos ultimos 7 dias
+              Container(
+                height: availabelHeight * (isLandscape ? 0.7 : 0.3),
+                child: Card(
+                  child: Chart(this._transaction),
+                  elevation: 5,
+                ),
               ),
-            ),
 
-            //Lista de Tranferencias execultadas
-            Container(
-              //defino o tamanho do container da Lista de Tranferencias
-              height: availabelHeight * 0.7,
-              child: TransactionList(_transaction, _deleteTransaction),
-            ),
+            //Lista de Tranferencias feitas
+            if (!this._showChart || !isLandscape)
+              Container(
+                //defino o tamanho do container da Lista de Tranferencias
+                height: availabelHeight * (isLandscape ? 1 : 0.6),
+                child: TransactionList(_transaction, _deleteTransaction),
+              ),
 //
           ],
         ),
