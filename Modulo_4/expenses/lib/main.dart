@@ -51,7 +51,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Transaction> _transaction = [];
+  List<Transaction> _transaction = [
+    Transaction(
+      id: "a",
+      date: DateTime.now(),
+      title: "Teste",
+      value: 123.45,
+    ),
+    Transaction(
+      id: "a",
+      date: DateTime.now(),
+      title: "Teste",
+      value: 123.45,
+    ),
+    Transaction(
+      id: "a",
+      date: DateTime.now(),
+      title: "Teste",
+      value: 123.45,
+    ),
+    Transaction(
+      id: "a",
+      date: DateTime.now(),
+      title: "Teste",
+      value: 123.45,
+    ),
+    Transaction(
+      id: "a",
+      date: DateTime.now(),
+      title: "Teste",
+      value: 123.45,
+    ),
+    Transaction(
+      id: "a",
+      date: DateTime.now(),
+      title: "Teste",
+      value: 123.45,
+    ),
+  ];
 
   //responsavel por informa um ID ao item da lista
   int id = 0;
