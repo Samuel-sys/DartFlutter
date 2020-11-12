@@ -51,7 +51,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Transaction> _transaction = [];
+  List<Transaction> _transaction = [
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "0",
+      title: 'null',
+      value: 5,
+      date: DateTime.now(),
+    ),
+  ];
 
   int id = 0;
 
@@ -94,17 +143,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text("Exepenses"),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _openTransactioFormModal(context),
+        ),
+      ],
+    );
+
+    final availabelHeight =
+        MediaQuery.of(context).size.height - //altura da tela do aparelho
+            appBar.preferredSize.height - //altura da appBar
+            MediaQuery.of(context).padding.top; //altura da barra de notificação
+
     return Scaffold(
       //cabeçalho
-      appBar: AppBar(
-        title: Text("Exepenses"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _openTransactioFormModal(context),
-          ),
-        ],
-      ),
+      appBar: appBar,
 
       //corpo
       body: SingleChildScrollView(
@@ -117,6 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //mais de um componete (mais de uma linha ou coluna etc)
           children: <Widget>[
             Container(
+              height: availabelHeight * 0.3,
               child: Card(
                 child: Chart(this._transaction),
                 elevation: 5,
@@ -124,7 +181,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             //Lista de Tranferencias execultadas
-            TransactionList(_transaction, _deleteTransaction),
+            Container(
+              //defino o tamanho do container da Lista de Tranferencias
+              height: availabelHeight * 0.7,
+              child: TransactionList(_transaction, _deleteTransaction),
+            ),
 //
           ],
         ),

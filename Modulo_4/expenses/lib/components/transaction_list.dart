@@ -11,7 +11,6 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return //Columns de transferencias realizadas
         Container(
-      height: 300, //defino o tamanho do container da Lista de Tranferencias
       child: transactions.isEmpty
           ? Column(
               //subistitui o SizedBox() utilizado na aula
