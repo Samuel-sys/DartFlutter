@@ -13,61 +13,66 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        //valor gasto no dia
-        Container(
-          padding: EdgeInsets.all(1),
-          height: 25,
-          child: FittedBox(
-            child: Text('R\$${value.toStringAsFixed(2)}'),
+    return LayoutBuilder(builder: (context, constranit) {
+      return Column(
+        children: <Widget>[
+          //valor gasto no dia
+          Container(
+            padding: EdgeInsets.all(1),
+            height: 0.15 * constranit.maxHeight,
+            child: FittedBox(
+              child: Text('R\$${value.toStringAsFixed(2)}'),
+            ),
           ),
-        ),
 
-        //espaçameto
-        SizedBox(height: 5),
+          //espaçameto
+          SizedBox(height: 0.05 * constranit.maxHeight),
 
-        //proporção do tamanho do grafico
-        Container(
-          height: 60,
-          width: 10,
+          //proporção do tamanho do grafico
+          Container(
+            height: 0.60 * constranit.maxHeight,
+            width: 10,
 
-          //
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: <Widget>[
-              //Definido o formato do container do grafico
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.green,
-                    width: 1.0,
-                  ),
-                  color: Color.fromRGBO(220, 220, 220, 1),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-
-              //preenchimento do container do grafico
-              FractionallySizedBox(
-                heightFactor: percentage, //1 = 100% | 0.5 == 50%
-                child: Container(
+            //
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: <Widget>[
+                //Definido o formato do container do grafico
+                Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    border: Border.all(
+                      color: Colors.green,
+                      width: 1.0,
+                    ),
+                    color: Color.fromRGBO(220, 220, 220, 1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-              ),
-            ],
+
+                //preenchimento do container do grafico
+                FractionallySizedBox(
+                  heightFactor: percentage, //1 = 100% | 0.5 == 50%
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
 
-        //espaçamento
-        SizedBox(height: 5),
+          //espaçamento
+          SizedBox(height: 0.05 * constranit.maxHeight),
 
-        //dia da semana
-        Text(this.labal),
-      ],
-    );
+          //dia da semana
+          Container(
+            height: 0.15 * constranit.maxHeight,
+            child: FittedBox(child: Text(this.labal)),
+          ),
+        ],
+      );
+    });
   }
 }
