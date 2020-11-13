@@ -23,6 +23,9 @@ class AdaptativeButton extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             child: Text(this.label),
             onPressed: this.onPressed,
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
           )
         : RaisedButton(
             color: Theme.of(context).primaryColor,
