@@ -92,6 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  var platformIOS = Platform.isIOS;
+
   //responsavel por informa um ID ao item da lista
   int id = 0;
 
@@ -137,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //===========================  Widgets  =========================================
   Widget _getIconButton({IconData icon, Function function}) {
-    return Platform.isIOS
+    return this.platformIOS
         ? GestureDetector(onTap: function, child: Icon(icon))
         : IconButton(icon: Icon(icon), onPressed: function);
   }
@@ -155,12 +157,12 @@ class _MyHomePageState extends State<MyHomePage> {
           function: () => setState(() => _showChart = !_showChart),
         ),
       _getIconButton(
-        icon: Platform.isIOS ? CupertinoIcons.add : Icons.add,
+        icon: this.platformIOS ? CupertinoIcons.add : Icons.add,
         function: () => _openTransactioFormModal(context),
       ),
     ];
 
-    final PreferredSizeWidget appBar = Platform.isIOS
+    final PreferredSizeWidget appBar = this.platformIOS
         ?
         //IOS
         CupertinoNavigationBar(
@@ -216,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    return Platform.isIOS
+    return this.platformIOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
             child: bodyPage,
@@ -230,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //
             floatingActionButton:
                 //se for um aparelho IOS ele não apresenta o FloatingActionButton
-                Platform.isIOS
+                this.platformIOS
                     ? Container()
                     : FloatingActionButton(
                         onPressed: () => _openTransactioFormModal(context),
