@@ -1,10 +1,12 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'components/chart.dart';
-import 'components/controler_platform.dart';
 import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'models/transaction.dart';
+
+bool isIOS = Platform.isIOS;
 
 main() => runApp(ExpensesApp());
 
@@ -53,49 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Transaction> _transaction = [
-    Transaction(
-      id: "a",
-      date: DateTime.now(),
-      title: "Teste",
-      value: 123.45,
-    ),
-    Transaction(
-      id: "a",
-      date: DateTime.now(),
-      title: "Teste",
-      value: 123.45,
-    ),
-    Transaction(
-      id: "a",
-      date: DateTime.now(),
-      title: "Teste",
-      value: 123.45,
-    ),
-    Transaction(
-      id: "a",
-      date: DateTime.now(),
-      title: "Teste",
-      value: 123.45,
-    ),
-    Transaction(
-      id: "a",
-      date: DateTime.now(),
-      title: "Teste",
-      value: 123.45,
-    ),
-    Transaction(
-      id: "a",
-      date: DateTime.now(),
-      title: "Teste",
-      value: 123.45,
-    ),
-  ];
-
-  final iconList =
-      ControlerPlatform.isIOS ? CupertinoIcons.refresh : Icons.list;
-  final iconChart =
-      ControlerPlatform.isIOS ? CupertinoIcons.refresh : Icons.bar_chart;
+  List<Transaction> _transaction = [];
 
   //responsavel por informa um ID ao item da lista
   int id = 0;
@@ -110,7 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         isScrollControlled: true,
         builder: (_) {
-          return TransactionForm(onSubmit: _adiconarTransaction);
+          return TransactionForm(
+            onSubmit: _adiconarTransaction,
+            isIOS: isIOS,
+          );
         });
   }
 
@@ -142,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //===========================  Widgets  =========================================
   Widget _getIconButton({IconData icon, Function function}) {
-    return ControlerPlatform.isIOS
+    return isIOS
         ? GestureDetector(onTap: function, child: Icon(icon)) //icon IOS
         : IconButton(icon: Icon(icon), onPressed: function); //icon Android
   }
@@ -156,16 +119,22 @@ class _MyHomePageState extends State<MyHomePage> {
     final actionsAppBar = <Widget>[
       if (isLandscape)
         _getIconButton(
-          icon: _showChart ? iconList : iconChart,
+          icon: _showChart
+              ? isIOS
+                  ? CupertinoIcons.refresh
+                  : Icons.list
+              : isIOS
+                  ? CupertinoIcons.refresh
+                  : Icons.bar_chart,
           function: () => setState(() => _showChart = !_showChart),
         ),
       _getIconButton(
-        icon: ControlerPlatform.isIOS ? CupertinoIcons.add : Icons.add,
+        icon: isIOS ? CupertinoIcons.add : Icons.add,
         function: () => _openTransactioFormModal(context),
       ),
     ];
 
-    final PreferredSizeWidget appBar = ControlerPlatform.isIOS
+    final PreferredSizeWidget appBar = isIOS
         ?
         //IOS
         CupertinoNavigationBar(
@@ -215,15 +184,27 @@ class _MyHomePageState extends State<MyHomePage> {
             if (!this._showChart || !isLandscape)
               Container(
                 //defino o tamanho do container da Lista de Tranferencias
-                height: availabelHeight * (isLandscape ? 1 : 0.6),
+                height: availabelHeight * (isLandscape ? 0.77 : 0.47),
                 child: TransactionList(_transaction, _deleteTransaction),
               ),
+
+            //apresenta um Button com o simbolo do FLutter com a função
+            //de mudar o desainer para o sistema IOS ou Android
+            Container(
+              alignment: Alignment.bottomLeft,
+              height: availabelHeight * 0.2,
+              margin: EdgeInsets.only(left: 10),
+              child: FloatingActionButton(
+                child: FlutterLogo(size: 35),
+                onPressed: () => (setState(() => isIOS = !isIOS)),
+              ),
+            )
           ],
         ),
       ),
     );
 
-    return ControlerPlatform.isIOS
+    return isIOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
             child: bodyPage,
@@ -237,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //
             floatingActionButton:
                 //se for um aparelho IOS ele não apresenta o FloatingActionButton
-                ControlerPlatform.isIOS
+                isIOS
                     ? Container()
                     : FloatingActionButton(
                         onPressed: () => _openTransactioFormModal(context),

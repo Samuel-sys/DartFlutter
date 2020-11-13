@@ -6,7 +6,10 @@ class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   final Function(String) onDelete;
 
-  TransactionList(this.transactions, this.onDelete);
+  TransactionList(
+    this.transactions,
+    this.onDelete,
+  );
   @override
   Widget build(BuildContext context) {
     return //Columns de transferencias realizadas
@@ -27,7 +30,7 @@ class TransactionList extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        height: 0.7 * constraints.maxHeight,
+                        height: 0.8 * constraints.maxHeight,
                         child: Image.asset(
                           "lib/assets/images/waiting.png", //endereco da imagem
                           fit: BoxFit.cover,

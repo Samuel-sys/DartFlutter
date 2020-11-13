@@ -1,14 +1,17 @@
 import 'package:expenses/components/adaptative_button.dart';
 import 'package:expenses/components/adaptative_date_picker.dart';
-import 'package:expenses/components/controler_platform.dart';
 import 'package:flutter/material.dart';
 
 import 'adaptative_textField.dart';
 
+bool thisIsIOS = false;
+
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
 
-  TransactionForm({@required this.onSubmit});
+  TransactionForm({@required this.onSubmit, @required bool isIOS}) {
+    thisIsIOS = isIOS;
+  }
 
   @override
   _TransactionFormState createState() => _TransactionFormState();
@@ -70,9 +73,11 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
             //campo de TITULO
             AdaptativeTextFild(
-                controller: _titleController,
-                onSubmitted: (_) => _submitForm(),
-                label: 'Titulo'),
+              controller: _titleController,
+              onSubmitted: (_) => _submitForm(),
+              label: 'Titulo',
+              isIOS: thisIsIOS,
+            ),
 
             //campo de VALOR DE TRANSFERENCIA
             AdaptativeTextFild(
@@ -80,9 +85,11 @@ class _TransactionFormState extends State<TransactionForm> {
               onSubmitted: (_) => _submitForm(),
               controller: this._valueController,
               label: 'Valor (R\$)',
+              isIOS: thisIsIOS,
             ),
 
             AdaptativeDatePicker(
+              isIOS: thisIsIOS,
               selectedDate: _selectedDate,
               onDateChanged: (newDate) {
                 setState(() {
@@ -90,7 +97,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
                   //se for um aparelho com sistema IOS ele não execulta o metodo
                   //submitForm
-                  if (!ControlerPlatform.isIOS) {
+                  if (!thisIsIOS) {
                     this._submitForm();
                   }
                 });
@@ -104,6 +111,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 AdaptativeButton(
                   onPressed: _submitForm,
                   label: "Nova Transação",
+                  isIOS: thisIsIOS,
                 ),
               ],
             ),

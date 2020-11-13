@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'controler_platform.dart';
-
-/* 
- * Criado com a intenção de adaptar o Button conforme 
- * a plataforma do aparelho (Android\IOS)
- */
-
 class AdaptativeButton extends StatelessWidget {
   final String label;
   final Function onPressed;
+  final bool isIOS;
 
-  AdaptativeButton({
-    this.label,
-    this.onPressed,
-  });
+  AdaptativeButton({this.label, this.onPressed, @required this.isIOS});
 
   @override
   Widget build(BuildContext context) {
-    return ControlerPlatform.isIOS
+    return isIOS
         ? CupertinoButton(
             color: Theme.of(context).primaryColor,
             child: Text(this.label),
