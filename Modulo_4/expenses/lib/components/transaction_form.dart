@@ -1,6 +1,7 @@
 import 'package:expenses/components/adaptative_button.dart';
+import 'package:expenses/components/adaptative_date_picker.dart';
+import 'package:expenses/components/controler_platform.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'adaptative_textField.dart';
 
@@ -21,25 +22,6 @@ class _TransactionFormState extends State<TransactionForm> {
   DateTime _selectedDate;
 
   bool allFilled = false;
-
-  //apresenta o datePicker
-  void _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime.now(),
-    ).then((pinckedDate) {
-      if (pinckedDate == null) {
-        return;
-      }
-      setState(() {
-        this._selectedDate = pinckedDate;
-
-        this._submitForm();
-      });
-    });
-  }
 
   _submitForm() {
     //armazena o titulo da transação a variavel
@@ -96,32 +78,23 @@ class _TransactionFormState extends State<TransactionForm> {
             AdaptativeTextFild(
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               onSubmitted: (_) => _submitForm(),
-              controller: _valueController,
+              controller: this._valueController,
               label: 'Valor (R\$)',
             ),
 
-            //campo da DATA DA TRANSFERENCIA
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(this._selectedDate == null
-                        ? 'Nenhuma data selecionada!'
-                        : "Data Selecionada: " +
-                            "${DateFormat('d/MM/y').format(this._selectedDate)}"),
-                  ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text('SelecionarData',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        )),
-                    onPressed: _showDatePicker,
-                  ),
-                ],
-              ),
+            AdaptativeDatePicker(
+              selectedDate: _selectedDate,
+              onDateChanged: (newDate) {
+                setState(() {
+                  this._selectedDate = newDate;
+
+                  //se for um aparelho com sistema IOS ele não execulta o metodo
+                  //submitForm
+                  if (!ControlerPlatform.isIOS) {
+                    this._submitForm();
+                  }
+                });
+              },
             ),
 
             //Botão de execução de cadastro
