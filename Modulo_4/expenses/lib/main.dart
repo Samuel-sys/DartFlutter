@@ -6,6 +6,9 @@ import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'models/transaction.dart';
 
+//var global para informar se o sistema esta rodando em uma plataforma IOS
+var platformIOS = Platform.isIOS;
+
 main() => runApp(ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
@@ -92,7 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
-  var platformIOS = Platform.isIOS;
+  final iconList = platformIOS ? CupertinoIcons.refresh : Icons.list;
+  final iconChart = platformIOS ? CupertinoIcons.refresh : Icons.bar_chart;
 
   //responsavel por informa um ID ao item da lista
   int id = 0;
@@ -139,9 +143,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //===========================  Widgets  =========================================
   Widget _getIconButton({IconData icon, Function function}) {
-    return this.platformIOS
-        ? GestureDetector(onTap: function, child: Icon(icon))
-        : IconButton(icon: Icon(icon), onPressed: function);
+    return platformIOS
+        ? GestureDetector(onTap: function, child: Icon(icon)) //icon IOS
+        : IconButton(icon: Icon(icon), onPressed: function); //icon Android
   }
 
   @override
@@ -153,16 +157,16 @@ class _MyHomePageState extends State<MyHomePage> {
     final actionsAppBar = <Widget>[
       if (isLandscape)
         _getIconButton(
-          icon: _showChart ? Icons.list : Icons.bar_chart,
+          icon: _showChart ? iconList : iconChart,
           function: () => setState(() => _showChart = !_showChart),
         ),
       _getIconButton(
-        icon: this.platformIOS ? CupertinoIcons.add : Icons.add,
+        icon: platformIOS ? CupertinoIcons.add : Icons.add,
         function: () => _openTransactioFormModal(context),
       ),
     ];
 
-    final PreferredSizeWidget appBar = this.platformIOS
+    final PreferredSizeWidget appBar = platformIOS
         ?
         //IOS
         CupertinoNavigationBar(
@@ -186,39 +190,41 @@ class _MyHomePageState extends State<MyHomePage> {
             appBar.preferredSize.height - //altura da appBar
             MediaQuery.of(context).padding.top; //altura da barra de notificação
 
-    final bodyPage = SingleChildScrollView(
-      //permite que a minha pagina tenha um scroll
-      child: Column(
-        //preenche todo o width da coluna (Column)
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    final bodyPage = SafeArea(
+      child: SingleChildScrollView(
+        //permite que a minha pagina tenha um scroll
+        child: Column(
+          //preenche todo o width da coluna (Column)
+          crossAxisAlignment: CrossAxisAlignment.stretch,
 
-        //O children diferente do child aceita
-        //mais de um componete (mais de uma linha ou coluna etc)
-        children: <Widget>[
-          //se estiver no modo paisagem e estiver com a
-          //opção de mostrar grafico ativo
-          if (this._showChart || !isLandscape)
-            //Grafico dos gastos dos ultimos 7 dias
-            Container(
-              height: availabelHeight * (isLandscape ? 0.7 : 0.3),
-              child: Card(
-                child: Chart(this._transaction),
-                elevation: 5,
+          //O children diferente do child aceita
+          //mais de um componete (mais de uma linha ou coluna etc)
+          children: <Widget>[
+            //se estiver no modo paisagem e estiver com a
+            //opção de mostrar grafico ativo
+            if (this._showChart || !isLandscape)
+              //Grafico dos gastos dos ultimos 7 dias
+              Container(
+                height: availabelHeight * (isLandscape ? 0.7 : 0.3),
+                child: Card(
+                  child: Chart(this._transaction),
+                  elevation: 5,
+                ),
               ),
-            ),
 
-          //Lista de Tranferencias feitas
-          if (!this._showChart || !isLandscape)
-            Container(
-              //defino o tamanho do container da Lista de Tranferencias
-              height: availabelHeight * (isLandscape ? 1 : 0.6),
-              child: TransactionList(_transaction, _deleteTransaction),
-            ),
-        ],
+            //Lista de Tranferencias feitas
+            if (!this._showChart || !isLandscape)
+              Container(
+                //defino o tamanho do container da Lista de Tranferencias
+                height: availabelHeight * (isLandscape ? 1 : 0.6),
+                child: TransactionList(_transaction, _deleteTransaction),
+              ),
+          ],
+        ),
       ),
     );
 
-    return this.platformIOS
+    return platformIOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
             child: bodyPage,
@@ -232,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //
             floatingActionButton:
                 //se for um aparelho IOS ele não apresenta o FloatingActionButton
-                this.platformIOS
+                platformIOS
                     ? Container()
                     : FloatingActionButton(
                         onPressed: () => _openTransactioFormModal(context),
