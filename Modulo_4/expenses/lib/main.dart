@@ -6,6 +6,9 @@ import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'models/transaction.dart';
 
+//Essa variavel teve que se tornar global pos estava
+//dando erro dentro do MyHomePage, como ela precisa ser passada de parametro
+//para as demais class/Widgets tive que por ela como global para evitar bugs
 bool isIOS = Platform.isIOS;
 
 main() => runApp(ExpensesApp());
@@ -58,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Transaction> _transaction = [];
 
   //responsavel por informa um ID ao item da lista
+  //(preferi assim para ter um maior controle)
   int id = 0;
 
   //informa se o usuario deseja ou não ver o grafico
@@ -77,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  //cadastrar transação
+  //cadastrar transferencia
   void _adiconarTransaction(String title, double value, DateTime data) {
     final newTransactio = Transaction(
       id: id.toString(),
@@ -104,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 //===========================  Widgets  =========================================
+  //simplificando o Widget IconButton colocando os dois tipo (Antroid \ IOS)
   Widget _getIconButton({IconData icon, Function function}) {
     return isIOS
         ? GestureDetector(onTap: function, child: Icon(icon)) //icon IOS
@@ -117,23 +122,41 @@ class _MyHomePageState extends State<MyHomePage> {
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     final actionsAppBar = <Widget>[
-      if (isLandscape)
-        _getIconButton(
-          icon: _showChart
-              ? isIOS
-                  ? CupertinoIcons.refresh
-                  : Icons.list
-              : isIOS
-                  ? CupertinoIcons.refresh
-                  : Icons.bar_chart,
-          function: () => setState(() => _showChart = !_showChart),
-        ),
-      _getIconButton(
-        icon: isIOS ? CupertinoIcons.add : Icons.add,
-        function: () => _openTransactioFormModal(context),
+      Row(
+        children: <Widget>[
+          //apresenta um Button com o simbolo do FLutter com a função
+          //de mudar o desainer para o sistema IOS ou Android
+          Container(
+            child: FlatButton(
+              onPressed: () {
+                setState(() {
+                  isIOS = !isIOS;
+                });
+              },
+              child: FlutterLogo(
+                size: 35,
+              ),
+            ),
+          ),
+
+          if (isLandscape)
+            _getIconButton(
+              icon: isIOS
+                  ? CupertinoIcons.refresh //sendo IOS o icon e o mesmo
+                  : _showChart
+                      ? Icons.bar_chart
+                      : Icons.list,
+              function: () => setState(() => _showChart = !_showChart),
+            ),
+          _getIconButton(
+            icon: isIOS ? CupertinoIcons.add : Icons.add,
+            function: () => _openTransactioFormModal(context),
+          ),
+        ],
       ),
     ];
 
+    //componetes da appBar
     final PreferredSizeWidget appBar = isIOS
         ?
         //IOS
@@ -158,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
             appBar.preferredSize.height - //altura da appBar
             MediaQuery.of(context).padding.top; //altura da barra de notificação
 
+    //componentes do Body
     final bodyPage = SafeArea(
       child: SingleChildScrollView(
         //permite que a minha pagina tenha um scroll
@@ -183,28 +207,31 @@ class _MyHomePageState extends State<MyHomePage> {
             //Lista de Tranferencias feitas
             if (!this._showChart || !isLandscape)
               Container(
+                alignment: Alignment.topCenter,
                 //defino o tamanho do container da Lista de Tranferencias
-                height: availabelHeight * (isLandscape ? 0.77 : 0.47),
+                height: availabelHeight *
+
+                    /*
+                     * Eu tenho um pouco de toque para a imagem não ficar
+                     * muito grande (imagem de Default) Defini que quando
+                     * Não tiver itens na lista o Container tera um tamano e
+                     * quando tiver itens na lista outro
+                     */
+                    (isLandscape
+                        ? this._transaction.length == 0
+                            ? 0.7
+                            : 1
+                        : this._transaction.length == 0
+                            ? 0.6
+                            : 0.7),
                 child: TransactionList(_transaction, _deleteTransaction),
               ),
-
-            //apresenta um Button com o simbolo do FLutter com a função
-            //de mudar o desainer para o sistema IOS ou Android
-            Container(
-              alignment: Alignment.bottomLeft,
-              height: availabelHeight * 0.2,
-              margin: EdgeInsets.only(left: 10),
-              child: FloatingActionButton(
-                child: FlutterLogo(size: 35),
-                onPressed: () => (setState(() => isIOS = !isIOS)),
-              ),
-            )
           ],
         ),
       ),
     );
 
-    return isIOS
+    return isIOS //define que tipo de corpo o sistema tera um Android ou IOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
             child: bodyPage,
@@ -224,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () => _openTransactioFormModal(context),
                         child: Icon(Icons.add),
                       ),
-            floatingActionButtonLocation:
+            floatingActionButtonLocation: //coloca o Button no centro da tela
                 FloatingActionButtonLocation.centerFloat,
           );
   }

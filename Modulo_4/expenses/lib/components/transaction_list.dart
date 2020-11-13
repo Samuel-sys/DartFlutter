@@ -14,30 +14,29 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return //Columns de transferencias realizadas
         Container(
+      //se passar uma lista vazia apresenta uma imagen de default
       child: transactions.isEmpty
           ? LayoutBuilder(
               builder: (ctx, constraints) {
-                return Center(
-                  child: Column(
-                    //subistitui o SizedBox() utilizado na aula
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        height: constraints.maxHeight * 0.2,
-                        child: Text(
-                          "Nenhuma Transação Cadastrada!",
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
+                return Column(
+                  //subistitui o SizedBox() utilizado na aula
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      height: constraints.maxHeight * 0.2,
+                      child: Text(
+                        "Nenhuma Transação Cadastrada!",
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                      Container(
-                        height: 0.8 * constraints.maxHeight,
-                        child: Image.asset(
-                          "lib/assets/images/waiting.png", //endereco da imagem
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Container(
+                      height: 0.8 * constraints.maxHeight,
+                      child: Image.asset(
+                        "lib/assets/images/waiting.png", //endereco da imagem
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  ],
                 );
               },
             )
