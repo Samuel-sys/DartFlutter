@@ -1,6 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'controler_platform.dart';
 
 /* 
  * Criado com a intenção de adaptar o Button conforme 
@@ -18,7 +19,7 @@ class AdaptativeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isIOS
+    return ControlerPlatform.isIOS
         ? CupertinoButton(
             color: Theme.of(context).primaryColor,
             child: Text(this.label),

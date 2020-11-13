@@ -2,6 +2,8 @@ import 'package:expenses/components/adaptative_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'adaptative_textField.dart';
+
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
 
@@ -70,23 +72,32 @@ class _TransactionFormState extends State<TransactionForm> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            //campo de TITULO
-            TextField(
-              controller: _titleController,
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Titulo',
+            SizedBox(
+              height: 0.1 * MediaQuery.of(context).size.height,
+            ),
+            Text(
+              "Registro de Gasto",
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
+            SizedBox(
+              height: 0.1 * MediaQuery.of(context).size.height,
+            ),
+            //campo de TITULO
+            AdaptativeTextFild(
+                controller: _titleController,
+                onSubmitted: (_) => _submitForm(),
+                label: 'Titulo'),
 
             //campo de VALOR DE TRANSFERENCIA
-            TextField(
+            AdaptativeTextFild(
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               onSubmitted: (_) => _submitForm(),
               controller: _valueController,
-              decoration: InputDecoration(
-                labelText: 'Valor (R\$)',
-              ),
+              label: 'Valor (R\$)',
             ),
 
             //campo da DATA DA TRANSFERENCIA

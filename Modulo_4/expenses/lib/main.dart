@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'components/chart.dart';
+import 'components/controler_platform.dart';
 import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'models/transaction.dart';
-
-//var global para informar se o sistema esta rodando em uma plataforma IOS
-var platformIOS = Platform.isIOS;
 
 main() => runApp(ExpensesApp());
 
@@ -95,8 +92,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
-  final iconList = platformIOS ? CupertinoIcons.refresh : Icons.list;
-  final iconChart = platformIOS ? CupertinoIcons.refresh : Icons.bar_chart;
+  final iconList =
+      ControlerPlatform.isIOS ? CupertinoIcons.refresh : Icons.list;
+  final iconChart =
+      ControlerPlatform.isIOS ? CupertinoIcons.refresh : Icons.bar_chart;
 
   //responsavel por informa um ID ao item da lista
   int id = 0;
@@ -143,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //===========================  Widgets  =========================================
   Widget _getIconButton({IconData icon, Function function}) {
-    return platformIOS
+    return ControlerPlatform.isIOS
         ? GestureDetector(onTap: function, child: Icon(icon)) //icon IOS
         : IconButton(icon: Icon(icon), onPressed: function); //icon Android
   }
@@ -161,12 +160,12 @@ class _MyHomePageState extends State<MyHomePage> {
           function: () => setState(() => _showChart = !_showChart),
         ),
       _getIconButton(
-        icon: platformIOS ? CupertinoIcons.add : Icons.add,
+        icon: ControlerPlatform.isIOS ? CupertinoIcons.add : Icons.add,
         function: () => _openTransactioFormModal(context),
       ),
     ];
 
-    final PreferredSizeWidget appBar = platformIOS
+    final PreferredSizeWidget appBar = ControlerPlatform.isIOS
         ?
         //IOS
         CupertinoNavigationBar(
@@ -224,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    return platformIOS
+    return ControlerPlatform.isIOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
             child: bodyPage,
@@ -238,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //
             floatingActionButton:
                 //se for um aparelho IOS ele não apresenta o FloatingActionButton
-                platformIOS
+                ControlerPlatform.isIOS
                     ? Container()
                     : FloatingActionButton(
                         onPressed: () => _openTransactioFormModal(context),
