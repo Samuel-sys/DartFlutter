@@ -46,9 +46,27 @@ class TransactionList extends StatelessWidget {
 
               itemBuilder: (ctx, index) {
                 final tr = transactions[index];
-                return TransactionItem(tr: tr, onDelete: onDelete);
+                return TransactionItem(
+                  /* no ListView.builder não e possivel usar o ValueKey
+                   * O GlobalObjectKey e menos eficiente por ter q comparar
+                   * o objeto e o, já o ValueKey ele compara apenas o paramentro
+                   * dado como comparação
+                   */
+                  key: GlobalObjectKey(tr),
+                  tr: tr,
+                  onDelete: onDelete,
+                );
               },
             ),
+      // ListView(
+      //     children: transactions.map((tr) {
+      //       return TransactionItem(
+      //         tr: tr,
+      //         onDelete: onDelete,
+      //         key: ValueKey(tr.id),
+      //       );
+      //     }).toList(),
+      //   ),
     );
   }
 }
