@@ -1,5 +1,6 @@
 import 'package:expenses/components/adaptative_button.dart';
 import 'package:expenses/components/adaptative_date_picker.dart';
+import 'package:expenses/main.dart';
 import 'package:flutter/material.dart';
 
 import 'adaptative_textField.dart';
@@ -71,9 +72,16 @@ class _TransactionFormState extends State<TransactionForm> {
     //tenta converter o valor digiatado para double caso não consiga
     //atribui o valor 0
     final value = double.tryParse(this._valueController.text) ?? 0.0;
+    DateTime data;
 
-    //armazena a data selecionada pelo usuario
-    final data = this._selectedDate;
+    //se for um aparelho IOS já apresenta a data de hoje como opção
+    //para o cliente escolher a data de hoje ele teria que selecionar uma
+    //outra data depois colocar no dia de hoje assim ele so precisa
+    //precionar o button que execulta o metodo _submitForm()
+    if (isIOS && this._selectedDate == null) {
+      this._selectedDate = DateTime.now();
+    }
+    data = this._selectedDate;
 
     //se um dos valores for invalido ele não efetua o cadastro
     if (title.isEmpty || value <= 0 || data == null) {
