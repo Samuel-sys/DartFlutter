@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AdaptativeTextFild extends StatelessWidget {
   final TextInputType keyboardType;
@@ -7,13 +8,16 @@ class AdaptativeTextFild extends StatelessWidget {
   final Function(String) onSubmitted;
   final String label;
   final bool isIOS;
+  final bool autoFocus;
 
-  const AdaptativeTextFild(
-      {this.keyboardType = TextInputType.text,
-      this.controller,
-      this.onSubmitted,
-      this.label,
-      @required this.isIOS});
+  const AdaptativeTextFild({
+    @required this.isIOS,
+    this.keyboardType = TextInputType.text,
+    this.controller,
+    this.onSubmitted,
+    this.label,
+    this.autoFocus = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,8 @@ class AdaptativeTextFild extends StatelessWidget {
               keyboardType: this.keyboardType,
               onSubmitted: this.onSubmitted,
               controller: this.controller,
-              placeholder: label,
+              placeholder: this.label,
+              autofocus: this.autoFocus,
               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 12),
             ),
           )
@@ -34,6 +39,7 @@ class AdaptativeTextFild extends StatelessWidget {
             keyboardType: this.keyboardType,
             onSubmitted: this.onSubmitted,
             controller: this.controller,
+            autofocus: this.autoFocus,
             decoration: InputDecoration(
               labelText: this.label,
             ));

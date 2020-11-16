@@ -11,13 +11,51 @@ class TransactionForm extends StatefulWidget {
 
   TransactionForm({@required this.onSubmit, @required bool isIOS}) {
     thisIsIOS = isIOS;
+    print("==========================================================\n"
+        "Consulta de medodos de ciclo de vide de um StatefulWidget\n"
+        "==========================================================\n");
+    print("Constructor TransactionForm");
   }
 
   @override
-  _TransactionFormState createState() => _TransactionFormState();
+  _TransactionFormState createState() {
+    print("createState _TransactionFormState");
+    return _TransactionFormState();
+  }
 }
 
 class _TransactionFormState extends State<TransactionForm> {
+  _TransactionFormState() {
+    print("Constructor _TransactionFormState");
+  }
+
+  @override
+  void initState() {
+    print("initState _TransactionFormState");
+
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant TransactionForm oldWidget) {
+    print("didUpdateWidget _TransactionFormState");
+
+    // ignore: todo
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    print("dispose _TransactionFormState");
+
+    // ignore: todo
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   final _titleController = TextEditingController();
 
   final _valueController = TextEditingController();
@@ -77,6 +115,7 @@ class _TransactionFormState extends State<TransactionForm> {
               onSubmitted: (_) => _submitForm(),
               label: 'Titulo',
               isIOS: thisIsIOS,
+              autoFocus: true,
             ),
 
             //campo de VALOR DE TRANSFERENCIA

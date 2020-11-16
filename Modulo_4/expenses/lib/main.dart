@@ -59,7 +59,27 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    //inicia o Observer que apresenta o status do app no console
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //encerra o Observer que apresenta o status do app no console
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    //imprime o state do App no console
+    print(state);
+  }
+
   List<Transaction> _transaction = [];
 
   //responsavel por informa um ID ao item da lista
