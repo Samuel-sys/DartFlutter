@@ -24,12 +24,12 @@ class ExpensesApp extends StatelessWidget {
 
         //padrão de estilo do headline6
         textTheme: ThemeData.light().textTheme.copyWith(
-            headline6: TextStyle(
+            headline6: const TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
-            button: TextStyle(
+            button: const TextStyle(
               fontFamily: 'OpenSans',
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -37,7 +37,7 @@ class ExpensesApp extends StatelessWidget {
         //padrão de estilo do AppBar
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: TextStyle(
+                headline6: const TextStyle(
                   fontFamily: 'OpenSans',
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ?
         //IOS
         CupertinoNavigationBar(
-            middle: Text("Despesas Pessoais"),
+            middle: const Text("Despesas Pessoais"),
             //no trailing ele precisa ser feito dentro de um widget
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -171,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
         :
         //ANDROID
         AppBar(
-            title: Text("Despesas Pessoais"),
+            title: const Text("Despesas Pessoais"),
             actions: actionsAppBar,
           );
 
@@ -242,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             //corpo
             body: bodyPage,
-//
+//quebra de linha
             floatingActionButton:
                 //se for um aparelho IOS ele não apresenta o FloatingActionButton
                 isIOS

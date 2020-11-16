@@ -8,7 +8,7 @@ class Transaction {
 
   //Definindo construtores e colocando parametros obrigatorios
   //com o parametro @required
-  Transaction(
+  const Transaction(
       {@required this.id,
       @required this.title,
       @required this.value,

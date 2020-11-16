@@ -6,7 +6,7 @@ class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   final Function(String) onDelete;
 
-  TransactionList(
+  const TransactionList(
     this.transactions,
     this.onDelete,
   );

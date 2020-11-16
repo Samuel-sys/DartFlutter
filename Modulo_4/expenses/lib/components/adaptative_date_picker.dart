@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class AdaptativeDatePicker extends StatelessWidget {
   final bool isIOS;
 
-  AdaptativeDatePicker({
+  const AdaptativeDatePicker({
     this.selectedDate,
     this.onDateChanged,
     @required this.isIOS,
