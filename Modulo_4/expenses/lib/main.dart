@@ -10,6 +10,8 @@ import 'models/transaction.dart';
 //dando erro dentro do MyHomePage, como ela precisa ser passada de parametro
 //para as demais class/Widgets tive que por ela como global para evitar bugs
 bool isIOS = Platform.isIOS;
+//Caso vc queira retira o Button de alteração de interface coloque esse valor
+//const ou final
 
 main() => runApp(ExpensesApp());
 
