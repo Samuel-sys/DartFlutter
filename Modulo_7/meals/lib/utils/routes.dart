@@ -1,5 +1,6 @@
 import 'package:meals/screens/categories_meals_screen.dart';
 import 'package:meals/screens/categories_screen.dart';
+import 'package:meals/screens/meal_detail_screen.dart';
 import 'package:meals/utils/app_routes.dart';
 
 /*
@@ -11,4 +12,6 @@ final routesPages = {
   AppRoutes.HOME: (_) => CategoriesScreen(), //pagina home
 
   AppRoutes.CATEGORIES_MEALS: (_) => CategoriesMealsScreen(),
+
+  AppRoutes.DETAILS_MEAL: (_) => MealDetailsScreen(),
 };
