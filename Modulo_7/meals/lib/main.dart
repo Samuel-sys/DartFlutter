@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
 
       theme: themeApp, //tema do app
 
-      routes: routesPages, //
+      routes: routesPages, //arquivo com o Map com as rotas das Pages
     );
   }
 }
