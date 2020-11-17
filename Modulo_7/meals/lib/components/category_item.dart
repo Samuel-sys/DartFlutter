@@ -16,7 +16,7 @@ class CategoryItem extends StatelessWidget {
       //dando a ela estilos e funções diferentes
       MaterialPageRoute(
         builder: (_) {
-          return CategoriesMealsScreen();
+          return CategoriesMealsScreen(category);
         },
       ),
     );
