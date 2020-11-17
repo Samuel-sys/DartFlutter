@@ -13,5 +13,5 @@ final routesPages = {
 
   AppRoutes.CATEGORIES_MEALS: (_) => CategoriesMealsScreen(),
 
-  AppRoutes.DETAILS_MEAL: (_) => MealDetailsScreen(),
+  AppRoutes.MEAL_DETAILS: (_) => MealDetailsScreen(),
 };

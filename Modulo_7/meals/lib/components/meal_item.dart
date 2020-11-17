@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/utils/app_routes.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
 
   const MealItem(this.meal);
 
-  void _selectMeal() {}
+  //metodo que entra na outra pagina
+  void _selectMeal(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.MEAL_DETAILS,
+      arguments: meal,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +23,13 @@ class MealItem extends StatelessWidget {
     //se coloca no final um parâmetro que informe a posição
     //.topRight (sendo do lado direito em cima)
 
+    final theme = Theme.of(context);
+
     return InkWell(
       //eventos
-      onTap: this._selectMeal,
+      onTap: () => this._selectMeal(context),
+      borderRadius: borderRadius,
+      splashColor: theme.primaryColor,
 
       child: Card(
         //estilo do container
