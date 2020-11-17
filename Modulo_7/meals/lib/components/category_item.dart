@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/category.dart';
+import 'package:meals/utils/app_routes.dart';
 import '../models/category.dart';
-import '../screens/categories_meals_screen.dart';
 
 class CategoryItem extends StatelessWidget {
   final Category category;
 
   void _selectCategory(BuildContext context) {
     // O Navigator e responsável por fazer as transições entre as paginas
-    Navigator.of(context)
+    Navigator.of(context).pushNamed(
+      AppRoutes.CATEGORIES_MEALS,
 
-        //dentro do push se entrega a rota da nova pagina a ser apresentada
-        .push(
-      //com o MaterialPage você pode incrementar ainda mais a sua pagina
-      //dando a ela estilos e funções diferentes
-      MaterialPageRoute(
-        builder: (_) {
-          return CategoriesMealsScreen(category);
-        },
-      ),
+      //arguments é utilizado para enviar um item (objeto, variável, const e etc)
+      //como um "parâmetro" para a nova tela
+      arguments: category,
     );
   }
 
