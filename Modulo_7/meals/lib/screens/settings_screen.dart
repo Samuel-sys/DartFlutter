@@ -3,9 +3,12 @@ import 'package:meals/components/main_drawer.dart';
 import 'package:meals/models/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
+  //function que irá filtrar a List de meal e salvar as configurações do usuario
   final Function(Settings) onSettingsChanged;
+  //registra as configurações que o App já tem registrado
+  final Settings settings;
 
-  const SettingsScreen(this.onSettingsChanged);
+  const SettingsScreen(this.settings, this.onSettingsChanged);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -13,6 +16,13 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   var settings = Settings();
+
+  //informa as configurações já programadas no inicio do _SettingsScreenState
+  @override
+  initState() {
+    super.initState();
+    settings = widget.settings;
+  }
 
   Widget _createSwitch(
     String title,
