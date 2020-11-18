@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:meals/components/main_drawer.dart';
+import 'package:meals/models/meal.dart';
 import 'package:meals/screens/categories_screen.dart';
 import 'package:meals/screens/favorite_screen.dart';
 
 class TabsScreen extends StatefulWidget {
+  //lista de Meal favoritos
+  final List<Meal> favoriteMeal;
+
+  const TabsScreen(this.favoriteMeal);
+
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
@@ -12,20 +18,26 @@ class _TabsScreenState extends State<TabsScreen> {
   int _selectedScreenIndex = 0;
 
   //lista de screens do App com todo os dados inicias
-  final List<Map<String, Object>> _screens = [
-    {
-      'title': 'Lista de Categorias',
-      'screen': CategoriesScreen(),
-      'label': 'Categoria',
-      'icon': Icon(Icons.category)
-    },
-    {
-      'title': 'Meus Favoritos',
-      'screen': FavoriteScreen(),
-      'label': 'Favorito',
-      'icon': Icon(Icons.star)
-    },
-  ];
+  List<Map<String, Object>> _screens;
+
+  @override
+  initState() {
+    super.initState();
+    _screens = [
+      {
+        'title': 'Lista de Categorias',
+        'screen': CategoriesScreen(),
+        'label': 'Categoria',
+        'icon': Icon(Icons.category)
+      },
+      {
+        'title': 'Meus Favoritos',
+        'screen': FavoriteScreen(widget.favoriteMeal),
+        'label': 'Favorito',
+        'icon': Icon(Icons.star)
+      },
+    ];
+  }
 
   //metodo para mudança de screens atravez do index da List com as instancias
   //das screens

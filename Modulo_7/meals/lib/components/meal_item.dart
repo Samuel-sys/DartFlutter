@@ -9,12 +9,10 @@ class MealItem extends StatelessWidget {
 
   //metodo que entra na outra pagina
   void _selectMeal(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(
-          AppRoutes.MEAL_DETAILS,
-          arguments: meal,
-        )
-        .then((value) => print(value));
+    Navigator.of(context).pushNamed(
+      AppRoutes.MEAL_DETAILS,
+      arguments: meal,
+    );
   }
 
   @override

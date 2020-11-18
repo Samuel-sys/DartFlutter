@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
 
-class MealDetailsScreen extends StatelessWidget {
-  //Container com o Titulo da pagina
+class MealDetailsScreen extends StatefulWidget {
+  final Function(Meal) onToggleFavorite;
+  final bool Function(Meal) isFavorite;
+
+  MealDetailsScreen(this.onToggleFavorite, this.isFavorite);
+
+  @override
+  _MealDetailsScreenState createState() => _MealDetailsScreenState();
+}
+
+class _MealDetailsScreenState extends State<MealDetailsScreen> {
   Widget _createSectionTitle(BuildContext context, String title) {
     //titulo Ingredientes
     return Container(
@@ -14,7 +23,6 @@ class MealDetailsScreen extends StatelessWidget {
     );
   }
 
-  //container da lista de ingredientes e de passos
   Widget _createContainer({Widget child}) {
     return Container(
       width: 330,
@@ -109,10 +117,8 @@ class MealDetailsScreen extends StatelessWidget {
 
       //button Favorito
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.star),
-        onPressed: () {
-          Navigator.of(context).pop(meal.title);
-        },
+        child: Icon(widget.isFavorite(meal) ? Icons.star : Icons.star_border),
+        onPressed: () => widget.onToggleFavorite(meal),
       ),
 
       //espaçamento
