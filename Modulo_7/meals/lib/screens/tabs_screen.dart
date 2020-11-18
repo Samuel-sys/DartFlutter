@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meals/components/main_drawer.dart';
 import 'package:meals/screens/categories_screen.dart';
 import 'package:meals/screens/favorite_screen.dart';
 
@@ -42,35 +43,39 @@ class _TabsScreenState extends State<TabsScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            _screens[_selectedScreenIndex]['title'], //titulo da tela
+            this._screens[_selectedScreenIndex]['title'], //titulo da tela
           ),
         ),
 
+        drawer: MainDrawer(),
+
         //body
-        body: _screens[_selectedScreenIndex]['screen'], //instancia da tela
+        body: this._screens[_selectedScreenIndex]['screen'], //instancia da tela
 
         //Tabs de navegação
         bottomNavigationBar: BottomNavigationBar(
-            //conforme o tab precionado ele altera o valor da index que indica
-            //a tela que foi selecionada
-            onTap: _selectSceen,
-            backgroundColor: Theme.of(context).primaryColor,
+          //conforme o tab precionado ele altera o valor da index que indica
+          //a tela que foi selecionada
+          onTap: this._selectSceen,
+          backgroundColor: Theme.of(context).primaryColor,
 
-            //cor dos icons selecionados e não selecionas
-            unselectedItemColor: Colors.white,
-            selectedItemColor: Theme.of(context).accentColor,
+          //cor dos icons selecionados e não selecionas
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Theme.of(context).accentColor,
 
-            //index da tela selecionada pelo items
-            currentIndex: _selectedScreenIndex, //
-            items:
-                //automatizado caso deseje colocar mas uma tela no app bar basta
-                //atualiza a List de screens
-                _screens.map((screen) {
-              return BottomNavigationBarItem(
-                icon: screen['icon'],
-                label: screen['label'],
-              );
-            }).toList()),
+          //index da tela selecionada pelo items
+          currentIndex: this._selectedScreenIndex, //
+          items:
+              //automatizado caso deseje colocar mas uma tela no app bar basta
+              //atualiza a List de screens
+              this._screens.map((itemsScreens) {
+            //cria um BottomNavigationBarItem para cada screen cadastrada
+            return BottomNavigationBarItem(
+              icon: itemsScreens['icon'],
+              label: itemsScreens['label'],
+            );
+          }).toList(),
+        ),
       ),
     );
   }
