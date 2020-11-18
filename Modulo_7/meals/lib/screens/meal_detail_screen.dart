@@ -84,7 +84,7 @@ class MealDetailsScreen extends StatelessWidget {
 
             this._createContainer(
               child: ListView.builder(
-                itemCount: meal.ingredients.length,
+                itemCount: meal.steps.length,
                 itemBuilder: (ctx, index) {
                   return Column(
                     children: [
