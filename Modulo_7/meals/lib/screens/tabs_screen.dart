@@ -10,42 +10,67 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedScreenIndex = 0;
 
+  //lista de screens do App com todo os dados inicias
   final List<Map<String, Object>> _screens = [
-    {'title': 'Lista de Categorias', 'screen': CategoriesScreen()},
-    {'title': 'Meus Favoritos', 'screen': FavoriteScreen()},
+    {
+      'title': 'Lista de Categorias',
+      'screen': CategoriesScreen(),
+      'label': 'Categoria',
+      'icon': Icon(Icons.category)
+    },
+    {
+      'title': 'Meus Favoritos',
+      'screen': FavoriteScreen(),
+      'label': 'Favorito',
+      'icon': Icon(Icons.star)
+    },
   ];
 
+  //metodo para mudança de screens atravez do index da List com as instancias
+  //das screens
   _selectSceen(int index) {
+    //atualiza a tela e muda o index que orienta o app a apresentar a tela
     setState(() => _selectedScreenIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: this._screens.length, //quantidade de telas posiveis de se dar tab
       child: Scaffold(
+        //AppBar
         appBar: AppBar(
           centerTitle: true,
-          title: Text(_screens[_selectedScreenIndex]['title']),
+          title: Text(
+            _screens[_selectedScreenIndex]['title'], //titulo da tela
+          ),
         ),
-        body: _screens[_selectedScreenIndex]['screen'],
+
+        //body
+        body: _screens[_selectedScreenIndex]['screen'], //instancia da tela
+
+        //Tabs de navegação
         bottomNavigationBar: BottomNavigationBar(
-          onTap: _selectSceen,
-          backgroundColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.white,
-          selectedItemColor: Theme.of(context).accentColor,
-          currentIndex: _selectedScreenIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.category),
-              label: "Categorias",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              label: "Favorito",
-            ),
-          ],
-        ),
+            //conforme o tab precionado ele altera o valor da index que indica
+            //a tela que foi selecionada
+            onTap: _selectSceen,
+            backgroundColor: Theme.of(context).primaryColor,
+
+            //cor dos icons selecionados e não selecionas
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Theme.of(context).accentColor,
+
+            //index da tela selecionada pelo items
+            currentIndex: _selectedScreenIndex, //
+            items:
+                //automatizado caso deseje colocar mas uma tela no app bar basta
+                //atualiza a List de screens
+                _screens.map((screen) {
+              return BottomNavigationBarItem(
+                icon: screen['icon'],
+                label: screen['label'],
+              );
+            }).toList()),
       ),
     );
   }
