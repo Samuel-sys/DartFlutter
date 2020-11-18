@@ -107,6 +107,14 @@ class MealDetailsScreen extends StatelessWidget {
         ),
       ),
 
+      //button Favorito
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.star),
+        onPressed: () {
+          Navigator.of(context).pop(meal.title);
+        },
+      ),
+
       //espaçamento
     );
   }
