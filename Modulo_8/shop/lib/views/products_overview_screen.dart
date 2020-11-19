@@ -12,6 +12,7 @@ class ProductOverviewScreen extends StatelessWidget {
     return Scaffold(
       //appBar
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Minha Loja"),
       ),
 

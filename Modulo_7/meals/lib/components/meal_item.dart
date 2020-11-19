@@ -4,15 +4,20 @@ import 'package:meals/utils/app_routes.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
+  final Function setState;
 
-  const MealItem(this.meal);
+  const MealItem(this.meal, [this.setState]);
 
   //metodo que entra na outra pagina
   void _selectMeal(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      AppRoutes.MEAL_DETAILS,
-      arguments: meal,
-    );
+    Navigator.of(context)
+        .pushNamed(
+          AppRoutes.MEAL_DETAILS,
+          arguments: meal,
+        )
+        //resolve o bug de quando esta na screen de favoritos vc abre o item e
+        //tira dos favoritos ele continuar na tela
+        .then((value) => setState());
   }
 
   @override
