@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/utils/app_routes.dart';
 
 class ProductItem extends StatelessWidget {
-  final Product product;
-
-  ProductItem(this.product);
-
   @override
   Widget build(BuildContext context) {
+    //pegando um produto atravez do contex usando o Provider
+    final Product product = Provider.of<Product>(
+      context, //pasando o context atual do app
+      listen:
+          false, //informa se houver algum evento relacionado a esse provider
+    );
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -23,7 +27,7 @@ class ProductItem extends StatelessWidget {
           onTap: () => Navigator.pushNamed(
             context,
             AppRoutes.PRODUCT_DETAIL,
-            arguments: this.product,
+            arguments: product,
           ),
         ),
 
@@ -38,11 +42,18 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
 
-          //Favorite
-          leading: IconButton(
-            icon: Icon(Icons.favorite),
-            onPressed: () {},
-            color: Theme.of(context).accentColor,
+          //dessa forma ele so permite que haja atualizações nesse trecho
+          //do Widget fazendo assim uma otimização no App
+          leading: Consumer<Product>(
+            builder: (ctx, productConsumer, _) =>
+                //Favorite
+                IconButton(
+              icon: Icon(productConsumer.isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_border),
+              onPressed: () => productConsumer.toggleFavorite(),
+              color: Theme.of(context).accentColor,
+            ),
           ),
 
           //carrinho \ compra
