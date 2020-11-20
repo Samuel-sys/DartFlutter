@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/providers/cart.dart';
+import 'package:shop/widgets/badge.dart';
 import 'package:shop/widgets/product_grid.dart';
 
 enum FilterOptions { Favorite, All }
@@ -24,28 +27,47 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         //actions
         actions: <Widget>[
           PopupMenuButton(
-              onSelected: (FilterOptions selectValue) {
-                //seta a opção do cliente
-                switch (selectValue) {
-                  case FilterOptions.All:
-                    setState(() => showFavoriteOnly = false);
-                    break;
-                  case FilterOptions.Favorite:
-                    setState(() => showFavoriteOnly = true);
-                    break;
-                }
-              },
-              icon: Icon(Icons.more_vert),
-              itemBuilder: (_) => [
-                    PopupMenuItem(
-                      child: Text("Somente favoritos"),
-                      value: FilterOptions.Favorite,
-                    ),
-                    PopupMenuItem(
-                      child: Text("Todos"),
-                      value: FilterOptions.All,
-                    )
-                  ])
+            onSelected: (FilterOptions selectValue) {
+              //seta a opção do cliente
+              switch (selectValue) {
+                case FilterOptions.All:
+                  setState(() => showFavoriteOnly = false);
+                  break;
+                case FilterOptions.Favorite:
+                  setState(() => showFavoriteOnly = true);
+                  break;
+              }
+            },
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                child: Text("Somente favoritos"),
+                value: FilterOptions.Favorite,
+              ),
+              PopupMenuItem(
+                child: Text("Todos"),
+                value: FilterOptions.All,
+              ),
+            ],
+          ),
+
+          //carrinho de compra
+          Consumer<Cart>(
+            builder: (_, cart, chiel) =>
+                //informa quantidade de itens no carrinho
+                Badge(
+              value: cart.itemCount.toString(),
+              child:
+
+                  //icon do carrinho
+                  IconButton(
+                icon: Icon(Icons.shopping_cart),
+
+                //evento
+                onPressed: () {},
+              ),
+            ),
+          ),
         ],
       ),
 
