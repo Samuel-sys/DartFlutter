@@ -25,6 +25,15 @@ class Cart with ChangeNotifier {
     return {...this._items};
   }
 
+  double get totalAmount {
+    var total = 0.0;
+
+    this._items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
+  }
+
   //informa a quantidade de itens no carrinho
   int get itemCount => this._items.length;
 
