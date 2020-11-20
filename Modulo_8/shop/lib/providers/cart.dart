@@ -5,12 +5,14 @@ import 'package:shop/providers/product.dart';
 //Responsavel por informa o item no carrinho
 class CartItem {
   final String id;
+  final String productId;
   final String title;
   final int quantity;
   final double price;
 
   CartItem({
     @required this.id,
+    @required this.productId,
     @required this.title,
     @required this.quantity,
     @required this.price,
@@ -45,6 +47,7 @@ class Cart with ChangeNotifier {
         (existingItem) {
           return CartItem(
             id: existingItem.id,
+            productId: product.id,
             title: existingItem.title,
             quantity: existingItem.quantity + 1,
             price: existingItem.price,
@@ -58,6 +61,7 @@ class Cart with ChangeNotifier {
             product.id,
             () => CartItem(
               id: Random().nextDouble.toString(),
+              productId: product.id,
               title: product.title,
               quantity: 1,
               price: product.price,
@@ -65,6 +69,11 @@ class Cart with ChangeNotifier {
           );
     }
 
+    notifyListeners();
+  }
+
+  void removeItem(String productId) {
+    this._items.remove(productId);
     notifyListeners();
   }
 }
