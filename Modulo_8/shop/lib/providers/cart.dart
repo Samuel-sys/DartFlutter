@@ -19,11 +19,14 @@ class CartItem {
 
 //informa um Map com todos os itens do carrinho
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items;
+  Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {...this._items};
   }
+
+  //informa a quantidade de itens no carrinho
+  int get itemCount => this._items.length;
 
   void addItem(Product product) {
     //se o item já existir ele atualiza o item adicionando mais um item na quantidade
@@ -43,13 +46,16 @@ class Cart with ChangeNotifier {
     //se não tiver esse item no carrinho ele adiciona o item no carrinho
     else {
       this._items.putIfAbsent(
-          product.id,
-          () => CartItem(
-                id: Random().nextDouble.toString(),
-                title: product.title,
-                quantity: 1,
-                price: product.price,
-              ));
+            product.id,
+            () => CartItem(
+              id: Random().nextDouble.toString(),
+              title: product.title,
+              quantity: 1,
+              price: product.price,
+            ),
+          );
     }
+
+    notifyListeners();
   }
 }

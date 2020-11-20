@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/utils/app_routes.dart';
 
@@ -12,6 +13,8 @@ class ProductItem extends StatelessWidget {
       listen:
           false, //informa se houver algum evento relacionado a esse provider
     );
+
+    final Cart cart = Provider.of<Cart>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -51,6 +54,7 @@ class ProductItem extends StatelessWidget {
               icon: Icon(productConsumer.isFavorite
                   ? Icons.favorite
                   : Icons.favorite_border),
+              //tira e coloca no favorite
               onPressed: () => productConsumer.toggleFavorite(),
               color: Theme.of(context).accentColor,
             ),
@@ -59,7 +63,12 @@ class ProductItem extends StatelessWidget {
           //carrinho \ compra
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
+
+            //add o item a carrinho se já tiver no carrinho add mais um na qtd
+            onPressed: () {
+              cart.addItem(product);
+              print(cart.itemCount);
+            },
             color: Theme.of(context).accentColor,
           ),
 
