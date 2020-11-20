@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/cart.dart';
+import 'package:shop/widgets/cart_item_widget.dart';
 
 class CartScreeen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Cart cart = Provider.of<Cart>(context);
+    final cartItem = cart.items.values.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +55,16 @@ class CartScreeen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.itemsCount,
+              itemBuilder: (context, index) {
+                //cria um ListTile para cada item colocado no carrinho
+                return CartItemWidget(cartItem[index]);
+              },
+            ),
+          )
         ],
       ),
     );

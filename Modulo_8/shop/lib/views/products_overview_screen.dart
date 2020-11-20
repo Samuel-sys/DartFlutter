@@ -57,7 +57,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             builder: (_, cart, chiel) =>
                 //informa quantidade de itens no carrinho
                 Badge(
-              value: cart.itemCount.toString(),
+              value: cart.itemsCount.toString(),
               child:
 
                   //icon do carrinho

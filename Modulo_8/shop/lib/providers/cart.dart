@@ -35,7 +35,7 @@ class Cart with ChangeNotifier {
   }
 
   //informa a quantidade de itens no carrinho
-  int get itemCount => this._items.length;
+  int get itemsCount => this._items.length;
 
   void addItem(Product product) {
     //se o item já existir ele atualiza o item adicionando mais um item na quantidade

@@ -67,7 +67,7 @@ class ProductItem extends StatelessWidget {
             //add o item a carrinho se já tiver no carrinho add mais um na qtd
             onPressed: () {
               cart.addItem(product);
-              print(cart.itemCount);
+              print(cart.itemsCount);
             },
             color: Theme.of(context).accentColor,
           ),
