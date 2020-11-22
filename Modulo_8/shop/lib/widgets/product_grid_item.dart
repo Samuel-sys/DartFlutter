@@ -4,7 +4,7 @@ import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/utils/app_routes.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //pegando um produto atravez do contex usando o Provider
@@ -64,10 +64,25 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
 
-            //add o item a carrinho se já tiver no carrinho add mais um na qtd
+            //Add ou ou remove Item
             onPressed: () {
+              //add o item a carrinho se já tiver no carrinho add mais um na qtd
               cart.addItem(product);
-              print(cart.itemsCount);
+
+              //se tiver um SnackBar aberto ele fechar para exibir o proximo
+              Scaffold.of(context).hideCurrentSnackBar();
+
+              //questiona se o usuario realmente quer o produto
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("${product.title} adicionado com sucesso!"),
+                  duration: Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: "DESFAZER",
+                    onPressed: () => cart.removeSingleitem(product.id),
+                  ),
+                ),
+              );
             },
             color: Theme.of(context).accentColor,
           ),

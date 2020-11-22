@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/providers/products.dart';
-import 'package:shop/widgets/product_item.dart';
+import 'package:shop/widgets/product_grid_item.dart';
 
 class ProducGrid extends StatelessWidget {
   final bool showFavoriteOnly;
@@ -25,10 +25,10 @@ class ProducGrid extends StatelessWidget {
         return ChangeNotifierProvider.value(
           //pasando o produto pelo Provaider
           value: products[i],
+
           //por ser um ChangeNotifierProvider.value ele não precisa ser passado
           //com uma function ele transfere diretamente um valor associado a ele
-
-          child: ProductItem(),
+          child: ProductGridItem(),
         );
       },
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
