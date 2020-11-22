@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shop/providers/order.dart';
+import 'package:shop/providers/orders.dart';
 
 class OrderWidget extends StatefulWidget {
   final Order order;

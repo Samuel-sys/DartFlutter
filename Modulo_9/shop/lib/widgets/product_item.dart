@@ -66,8 +66,19 @@ class ProductItem extends StatelessWidget {
 
             //add o item a carrinho se já tiver no carrinho add mais um na qtd
             onPressed: () {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Produto adicionado com sucesso!"),
+                  duration: Duration(seconds: 1),
+                  action: SnackBarAction(
+                    label: 'DESFAZER',
+                    onPressed: () {
+                      print("Desfazer");
+                    },
+                  ),
+                ),
+              );
               cart.addItem(product);
-              print(cart.itemsCount);
             },
             color: Theme.of(context).accentColor,
           ),

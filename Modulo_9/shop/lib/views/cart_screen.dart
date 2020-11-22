@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/cart.dart';
-import 'package:shop/providers/order.dart';
+import 'package:shop/providers/orders.dart';
 import 'package:shop/widgets/cart_item_widget.dart';
 
-class CartScreeen extends StatelessWidget {
+class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Cart cart = Provider.of<Cart>(context);

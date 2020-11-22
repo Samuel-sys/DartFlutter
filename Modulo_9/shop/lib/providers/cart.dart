@@ -23,9 +23,7 @@ class CartItem {
 class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
-  Map<String, CartItem> get items {
-    return {...this._items};
-  }
+  Map<String, CartItem> get items => {...this._items};
 
   double get totalAmount {
     var total = 0.0;
@@ -60,7 +58,7 @@ class Cart with ChangeNotifier {
       this._items.putIfAbsent(
             product.id,
             () => CartItem(
-              id: Random().nextDouble.toString(),
+              id: Random().nextDouble().toString(),
               productId: product.id,
               title: product.title,
               quantity: 1,

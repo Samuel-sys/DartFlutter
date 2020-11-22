@@ -10,7 +10,7 @@ class CartItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: UniqueKey(), //chave unica para cada item
+      key: ValueKey(cartItem.id), //chave unica para cada item
       background: Container(
         color: Theme.of(context).errorColor,
         child: Icon(
