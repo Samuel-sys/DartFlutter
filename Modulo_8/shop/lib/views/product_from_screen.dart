@@ -26,7 +26,23 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   //atualiza a imagem do container com a Imagem da URL
-  void _updateImageUrl() => setState(() {});
+  void _updateImageUrl() {
+    if (isValidImageUrl(this._imageUrlControl.text)) {
+      setState(() {});
+    }
+  }
+
+  bool isValidImageUrl(String url) {
+    bool startWithHttp = url.toLowerCase().startsWith('http://');
+    bool startWithHttps = url.toLowerCase().startsWith('https://');
+
+    bool endsWithPng = url.toLowerCase().endsWith('png');
+    bool endsWithJpg = url.toLowerCase().endsWith('jpg');
+    bool endsWithJpeg = url.toLowerCase().endsWith('jpeg');
+
+    return (startWithHttp || startWithHttps) &&
+        (endsWithPng || endsWithJpeg || endsWithJpg);
+  }
 
   @override
   void dispose() {
@@ -44,18 +60,25 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   void _saveForm() {
-    _form.currentState.save();
+    var isValid = this._form.currentState.validate();
 
-    //cria um objeto com o novo produto a ser cadastrado no provider Products
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      title: this._formData['title'],
-      description: this._formData['description'],
-      price: this._formData['price'],
-      imageUrl: this._formData['imageUrl'],
-    );
+    if (!isValid) {
+      return;
+    } else {
+      //o metodo save so pode ser execultado depois do validate
+      this._form.currentState.save();
 
-    print(newProduct.id);
+      //cria um objeto com o novo produto a ser cadastrado no provider Products
+      final newProduct = Product(
+        id: Random().nextDouble().toString(),
+        title: this._formData['title'],
+        description: this._formData['description'],
+        price: this._formData['price'],
+        imageUrl: this._formData['imageUrl'],
+      );
+
+      print(newProduct.id);
+    }
   }
 
   @override
@@ -89,6 +112,18 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(this._priceFocusNode),
                 onSaved: (value) => this._formData['title'] = value,
+                validator: (value) {
+                  bool isEmpty = value.trim().isEmpty;
+                  bool isValid = value.trim().length < 3;
+
+                  if (isEmpty) {
+                    return 'Informe um título válido';
+                  }
+                  if (isValid) {
+                    return 'Informe um título com no minimo 3 letras!';
+                  }
+                  return null;
+                },
               ),
 
               //Preço do produto
@@ -102,6 +137,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 //salva o texto dentro do TextFormField no Map _formData
                 onSaved: (value) =>
                     this._formData['price'] = double.parse(value),
+                validator: (value) {
+                  var newPrice = double.tryParse(value);
+                  bool isValid = newPrice == null || newPrice <= 0;
+                  if (isValid) {
+                    return 'Informe um preço válido';
+                  }
+                  return null;
+                },
               ),
 
               //Descrição do produto
@@ -111,6 +154,18 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 keyboardType: TextInputType.multiline,
                 focusNode: this._descriptionFocusNode,
                 onSaved: (value) => this._formData['description'] = value,
+                validator: (value) {
+                  bool isEmpty = value.trim().isEmpty;
+                  bool isValid = value.trim().length > 10;
+
+                  if (isEmpty) {
+                    return 'Insira uma descrição valida';
+                  }
+                  if (isValid) {
+                    return 'Insira uma descrição valida de pelo menos 10 letras';
+                  }
+                  return null;
+                },
               ),
 
               //URL da imagem
@@ -129,6 +184,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         this._saveForm();
                       },
                       onSaved: (value) => this._formData['imageUrl'] = value,
+                      validator: (value) {
+                        bool emptyUrl = value.trim().isEmpty;
+                        bool invalidUrl = !isValidImageUrl(value);
+                        if (emptyUrl || invalidUrl) {
+                          return 'Informe uma URL valida';
+                        }
+                        return null;
+                      },
                     ),
                   ),
 
