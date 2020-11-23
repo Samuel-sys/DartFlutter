@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/providers/product.dart';
+import 'package:shop/providers/products.dart';
 
 class ProductFormScreen extends StatefulWidget {
   @override
@@ -70,14 +72,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
       //cria um objeto com o novo produto a ser cadastrado no provider Products
       final newProduct = Product(
-        id: Random().nextDouble().toString(),
         title: this._formData['title'],
         description: this._formData['description'],
         price: this._formData['price'],
         imageUrl: this._formData['imageUrl'],
       );
 
-      print(newProduct.id);
+      Provider.of<Products>(context, listen: false).addProduct(newProduct);
+
+      //Quando o cadastro tiver sido terminado
+      //ele sai do form de cadastro de produto
+      Navigator.of(context).pop();
     }
   }
 
@@ -156,7 +161,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onSaved: (value) => this._formData['description'] = value,
                 validator: (value) {
                   bool isEmpty = value.trim().isEmpty;
-                  bool isValid = value.trim().length > 10;
+                  bool isValid = value.trim().length < 10;
 
                   if (isEmpty) {
                     return 'Insira uma descrição valida';
