@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/products.dart';
+import 'package:shop/utils/app_routes.dart';
 import 'package:shop/widgets/app_drawer.dart';
+import 'package:shop/widgets/product_item.dart';
 
 class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<Products>(context);
+    final providerProducts = Provider.of<Products>(context);
+    final listProducts = Provider.of<Products>(context).items;
 
     return Scaffold(
       appBar: AppBar(
@@ -15,7 +18,8 @@ class ProductsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AppRoutes.PRODUCTS_FORM),
           )
         ],
       ),
@@ -23,12 +27,13 @@ class ProductsScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(8),
         child: ListView.builder(
-          itemCount: products.itemsCount,
-          itemBuilder: (ctx, index) {
-            var product = products.items[index];
-
-            return Text("${product.title}");
-          },
+          itemCount: providerProducts.itemsCount,
+          itemBuilder: (ctx, index) => Column(
+            children: [
+              ProductItem(listProducts[index]),
+              Divider(),
+            ],
+          ),
         ),
       ),
     );
