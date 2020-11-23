@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shop/data/dummy_data.dart';
 import 'package:shop/providers/product.dart';
 
@@ -27,6 +28,67 @@ class Products with ChangeNotifier {
 
     //notifica todos os intereçados que a lista de produtos foi alterado
     notifyListeners();
+  }
+
+  //atualiza um produto se caso não encontrar o produto a ser atualizado
+  //retorna um valor false
+  void updateProduct(Product product) {
+    if (product == null || product.id == null) {
+      return;
+    }
+
+    final index = this._items.indexWhere((prod) => prod.id == product.id);
+
+    if (index >= 0) {
+      this._items[index] = product;
+      notifyListeners();
+    }
+  }
+
+  void deletedProduct(Product product, BuildContext context) {
+    final index = this._items.indexWhere((prod) => prod.id == product.id);
+
+    if (index >= 0) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Tem certeza?"),
+          content: Text(
+            "Tem certeza que você quer deletar " +
+                "o produto:\n ${product.title}?",
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            FlatButton(
+              child: Text("SIM"),
+              onPressed: () {
+                this._items.removeWhere((prod) => prod.id == product.id);
+                notifyListeners();
+                //fecha o AlertDialog
+                Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text("NÃO"),
+              onPressed: () => Navigator.of(ctx).pop(),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            content:
+                Text("Erro ao localizar o produto no sistema:\nindex:$index"),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Ok"),
+              )
+            ],
+          ));
+    }
   }
 }
 // bool _shoFavoriteOnly = false;

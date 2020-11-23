@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +23,33 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     super.initState();
 
     this._imageUrlFocusNode.addListener(_updateImageUrl);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    //isso so pode ser feito se o _formData estiver vazio ou seja na inicilização
+    if (this._formData.isEmpty) {
+      var product = ModalRoute.of(context).settings.arguments as Product;
+
+      //se for passado um produto ele recebe os valores e coloca no intialValue
+      //de cada campo
+      if (product != null) {
+        this._formData['id'] = product.id;
+        this._formData['title'] = product.title;
+        this._formData['description'] = product.description;
+        this._formData['price'] = product.price;
+        this._formData['imageUrl'] = product.imageUrl;
+
+        this._imageUrlControl.text = this._formData['imageUrl'];
+      } else {
+        //como o price (preço) precisa ser convertido para String se o usuario
+        //passar um product em arguments e preciso da um valor inicial para ele
+        //mesmo sendo vazio
+        this._formData['price'] = '';
+      }
+    }
   }
 
   //atualiza a imagem do container com a Imagem da URL
@@ -71,14 +96,20 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       this._form.currentState.save();
 
       //cria um objeto com o novo produto a ser cadastrado no provider Products
-      final newProduct = Product(
+      final product = Product(
+        id: this._formData['id'],
         title: this._formData['title'],
         description: this._formData['description'],
         price: this._formData['price'],
         imageUrl: this._formData['imageUrl'],
       );
 
-      Provider.of<Products>(context, listen: false).addProduct(newProduct);
+      final providerProducts = Provider.of<Products>(context, listen: false);
+      if (this._formData['id'] == null) {
+        providerProducts.addProduct(product);
+      } else {
+        providerProducts.updateProduct(product);
+      }
 
       //Quando o cadastro tiver sido terminado
       //ele sai do form de cadastro de produto
@@ -111,6 +142,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             children: [
               //Nome do produto (titulo)
               TextFormField(
+                initialValue: this._formData['title'],
                 autofocus: true,
                 decoration: InputDecoration(labelText: 'Titulo'),
                 textInputAction: TextInputAction.next,
@@ -133,6 +165,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
               //Preço do produto
               TextFormField(
+                initialValue: this._formData['price'].toString(),
                 focusNode: this._priceFocusNode,
                 decoration: InputDecoration(labelText: 'Preço'),
                 textInputAction: TextInputAction.next,
@@ -154,6 +187,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
               //Descrição do produto
               TextFormField(
+                initialValue: this._formData['description'],
                 decoration: InputDecoration(labelText: 'Descrição'),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
