@@ -14,6 +14,11 @@ class AppDrawer extends StatelessWidget {
       'icon': Icons.payment,
       'title': 'Pedidos',
     },
+    {
+      'screen': AppRoutes.PRODUCTS,
+      'icon': Icons.edit,
+      'title': 'Gerenciar produtos',
+    },
   ];
 
   @override

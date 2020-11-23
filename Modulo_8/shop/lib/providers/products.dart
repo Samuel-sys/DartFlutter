@@ -8,6 +8,8 @@ class Products with ChangeNotifier {
   //todos os items
   List<Product> get items => [...this._items];
 
+  int get itemsCount => this._items.length;
+
   //items marcados como favoritos
   List<Product> get favoriteItems =>
       this._items.where((prod) => prod.isFavorite).toList();
