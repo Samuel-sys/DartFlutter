@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,34 @@ import 'package:shop/providers/product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = DUMMY_PRODUCTS;
+  final String _url =
+      'https://flutter-shop-alencar.firebaseio.com/products.json';
+
+  Future<void> loadProducts() async {
+    final response = await http.get(this._url);
+    Map<String, dynamic> data = json.decode(response.body);
+
+    if (data != null) {
+      //para evitar a duplicação de itens no app limpa a lista anterior
+      this._items.clear();
+      data.forEach(
+        (productId, productData) {
+          this._items.add(
+                Product(
+                  //o propio fire base (io) gera um codigo unico que pode ser usado como Id
+                  id: productId,
+                  title: productData['title'],
+                  description: productData['description'],
+                  price: productData['price'],
+                  imageUrl: productData['imageUrl'],
+                  isFavorite: productData['isFavorite'],
+                ),
+              );
+        },
+      );
+      notifyListeners();
+    }
+  }
 
   //todos os items
   List<Product> get items => [...this._items];
@@ -19,35 +46,30 @@ class Products with ChangeNotifier {
   List<Product> get favoriteItems =>
       this._items.where((prod) => prod.isFavorite).toList();
 
-  void addProduct(Product newProduct) {
-    const url = 'https://flutter-shop-alencar.firebaseio.com/products.json';
-
-    http
-        .post(
-      url,
-      body: json.encode({
-        'title': newProduct.title,
-        'description': newProduct.description,
-        'price': newProduct.price,
-        'imageUrl': newProduct.imageUrl,
-        'isFavorite': newProduct.isFavorite
-      }),
-    )
-        .then((response) {
-      //so irá cadastrar o Objeto Product quando tiver sido registrado
-      //na API do fire base
-      this._items.add(Product(
+  Future<Null> addProduct(Product newProduct) async {
+    //o await e usado para fazer com que o sistema espere o resultado
+    //do Future e depositar ele na variavel para depois continuar o codigo
+    var response = await http.post(_url,
+        body: json.encode(
+          {
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl,
+            'isFavorite': newProduct.isFavorite
+          },
+        ));
+    this._items.add(
+          Product(
             //o propio fire base (io) gera um codigo unico que pode ser usado como Id
             id: json.decode(response.body)['name'],
             title: newProduct.title,
             description: newProduct.description,
             price: newProduct.price,
             imageUrl: newProduct.imageUrl,
-          ));
-
-      //notifica todos os intereçados que a lista de produtos foi alterado
-      notifyListeners();
-    });
+          ),
+        );
+    notifyListeners();
   }
 
   //atualiza um produto se caso não encontrar o produto a ser atualizado
@@ -69,36 +91,14 @@ class Products with ChangeNotifier {
     final index = this._items.indexWhere((prod) => prod.id == product.id);
 
     if (index >= 0) {
+      this._items.removeWhere((prod) => prod.id == product.id);
+      notifyListeners();
+    }
+    //caso não encontre o index informa o usuario
+    else {
       showDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text("Tem certeza?"),
-          content: Text(
-            "Tem certeza que você quer deletar " +
-                "o produto:\n ${product.title}?",
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            FlatButton(
-              child: Text("SIM"),
-              onPressed: () {
-                this._items.removeWhere((prod) => prod.id == product.id);
-                notifyListeners();
-                //fecha o AlertDialog
-                Navigator.of(ctx).pop();
-              },
-            ),
-            FlatButton(
-              child: Text("NÃO"),
-              onPressed: () => Navigator.of(ctx).pop(),
-            ),
-          ],
-        ),
-      );
-    } else {
-      showDialog(
-          context: context,
-          child: AlertDialog(
+        child: AlertDialog(
             content:
                 Text("Erro ao localizar o produto no sistema:\nindex:$index"),
             actions: [
@@ -106,8 +106,8 @@ class Products with ChangeNotifier {
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text("Ok"),
               )
-            ],
-          ));
+            ]),
+      );
     }
   }
 }
