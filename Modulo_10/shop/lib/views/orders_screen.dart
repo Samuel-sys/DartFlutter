@@ -4,32 +4,9 @@ import 'package:shop/providers/order.dart';
 import 'package:shop/widgets/app_drawer.dart';
 import 'package:shop/widgets/order_widget.dart';
 
-class OrdersScreen extends StatefulWidget {
-  @override
-  _OrdersScreenState createState() => _OrdersScreenState();
-}
-
-class _OrdersScreenState extends State<OrdersScreen> {
-  //responsável por informa a Page quando a List de Orders estive carregado
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    //carrega a lista de Objetos do tipo Orders que informa os pedidos efetuados
-    Provider.of<Orders>(context, listen: false)
-        .loadOrders() //método responsável por carregar os dados da API
-        .then((_) => setState(() {
-              this._isLoading = false; //avisa que os dados já foram carregados
-            }));
-  }
-
+class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //Provider de conexão com o WebServer (API)
-    final Orders orders = Provider.of(context);
-
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
@@ -38,23 +15,42 @@ class _OrdersScreenState extends State<OrdersScreen> {
       ),
 
       //body
-      body:
-          //esta carregando a lista de produtos ainda ??
-          this._isLoading
-              ? Center(child: CircularProgressIndicator())
-              : RefreshIndicator(
-                  //caso ele ative o onRefreshe ele faz
-                  //uma atualização nos dados do sistema
+      body: FutureBuilder(
+        //ele monitora esse evento Future
+        future: Provider.of<Orders>(context, listen: false).loadOrders(),
+        builder: (ctx, snapshot) {
+          //se ele estiver carregando os dados ele executa esse bloco de comandos
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          //Caso ocorra algum erro ele executa esse bloco de comandos
+          else if (snapshot.error != null) {
+            return Center(
+                child: Text("Ocoreu um erro ao processar os dados..."));
+          }
+
+          //quando tiver carregado a tela ele carrega esse bloco de comandos
+          else {
+            return
+                //caso aconteça alguma alteração no sistema ele atualiza apenas essa parte na page
+                Consumer<Orders>(
+              builder: (context, orders, child) {
+                return RefreshIndicator(
+                  //metodo para atualizar os dados do App com o da API
                   onRefresh: () => orders.loadOrders(),
 
-                  //lista de Pedidos feitos
+                  //lista de pedidos efetuados
                   child: ListView.builder(
                     itemCount: orders.itemsCount,
-                    itemBuilder: (ctx, i) {
-                      return OrderWidget(orders.items[i]);
-                    },
+                    itemBuilder: (ctx, i) => OrderWidget(orders.items[i]),
                   ),
-                ),
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }
