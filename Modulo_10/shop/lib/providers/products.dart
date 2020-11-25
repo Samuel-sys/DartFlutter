@@ -4,15 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/data/dummy_data.dart';
+import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/providers/product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = DUMMY_PRODUCTS;
-  final String _url =
-      'https://flutter-shop-alencar.firebaseio.com/products.json';
+  //Lembrese de por .json no final da _baseUrl quando for utilizar ela
+  final _baseUrl = 'https://flutter-shop-alencar.firebaseio.com/products';
+  /*
+   * post = Insert (cadatrar)
+   * patch = Update (alterar, lembre de passar o id como parametro) 
+   * get = Select (consulta)
+   * delete = Delete (deleta, lembre de passar o id como parametro)
+   */
 
   Future<void> loadProducts() async {
-    final response = await http.get(this._url);
+    final response = await http.get("$_baseUrl.json");
     Map<String, dynamic> data = json.decode(response.body);
 
     if (data != null) {
@@ -49,7 +56,7 @@ class Products with ChangeNotifier {
   Future<Null> addProduct(Product newProduct) async {
     //o await e usado para fazer com que o sistema espere o resultado
     //do Future e depositar ele na variavel para depois continuar o codigo
-    var response = await http.post(_url,
+    var response = await http.post("$_baseUrl.json",
         body: json.encode(
           {
             'title': newProduct.title,
@@ -74,7 +81,7 @@ class Products with ChangeNotifier {
 
   //atualiza um produto se caso não encontrar o produto a ser atualizado
   //retorna um valor false
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     if (product == null || product.id == null) {
       return;
     }
@@ -82,17 +89,42 @@ class Products with ChangeNotifier {
     final index = this._items.indexWhere((prod) => prod.id == product.id);
 
     if (index >= 0) {
+      await http.patch(
+        "$_baseUrl/${product.id}.json",
+        body: json.encode(
+          {
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'imageUrl': product.imageUrl,
+          },
+        ),
+      );
       this._items[index] = product;
       notifyListeners();
     }
   }
 
-  void deletedProduct(Product product, BuildContext context) {
+  void deletedProduct(Product product, BuildContext context) async {
     final index = this._items.indexWhere((prod) => prod.id == product.id);
 
     if (index >= 0) {
-      this._items.removeWhere((prod) => prod.id == product.id);
-      notifyListeners();
+      //ele paga primeiro o product dentro do sistema do App
+      //caso de erro restaura o item depois de receber o statusCode
+      //do WebServer
+      this._items.remove(product);
+      notifyListeners(); //atualiza a list do app
+
+      final response = await http.delete("$_baseUrl/${product.id}");
+
+      if (response.statusCode >= 400) {
+        //add o produto qua não pode ser cadastrado
+        //de novo a lista do produto do usuario
+        this._items.insert(index, product);
+        notifyListeners(); //atualiza a list do app
+
+        throw HttpException("Ocorreu um erro na exclusão do produto.");
+      }
     }
     //caso não encontre o index informa o usuario
     else {

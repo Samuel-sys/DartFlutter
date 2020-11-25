@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/providers/products.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -11,6 +12,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
+
     return ListTile(
       onTap: () => Navigator.pushNamed(
         context,
@@ -50,19 +53,33 @@ class ProductItem extends StatelessWidget {
                         FlatButton(
                           child: Text("SIM"),
                           onPressed: () {
-                            Provider.of<Products>(context, listen: false)
-                                .deletedProduct(product, context);
-
                             //fecha o AlertDialog
-                            Navigator.of(ctx).pop();
+                            Navigator.of(ctx).pop(true);
                           },
                         ),
                         FlatButton(
                           child: Text("NÃO"),
-                          onPressed: () => Navigator.of(ctx).pop(),
+                          onPressed: () => Navigator.of(ctx).pop(false),
                         ),
                       ],
                     ),
+                  ).then(
+                    (value) async {
+                      if (value) {
+                        try {
+                          // ignore: await_only_futures
+                          await Provider.of<Products>(context, listen: false)
+                              .deletedProduct(product, context);
+                        } on HttpException catch (erro) {
+                          scaffold.showSnackBar(
+                            SnackBar(
+                              content: Text(erro.toString()),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      }
+                    },
                   );
                 },
                 icon: Icon(Icons.delete),

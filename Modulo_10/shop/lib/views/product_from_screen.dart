@@ -112,43 +112,36 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
       final providerProducts = Provider.of<Products>(context, listen: false);
 
-      if (this._formData['id'] == null) {
-        try {
-          //ponte de conexão com o provider para cadastro de um novo produto
+      try {
+        //se o App informar o Id do Product ele atualiza se não ele cadastra
+        if (this._formData['id'] == null) {
           await providerProducts.addProduct(product);
-
-          //quando terminado o cadastro ele fecha a tela
-          Navigator.of(context).pop();
-        } catch (erro) {
-          print("Foi");
-          //AlertDialog informando que houve um erro no cadastro
-          await showDialog<Null>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text("Ocorreu um erro!"),
-              content: Text("Ocorreu um erro para salvar o produto!"),
-              actions: [
-                FlatButton(
-                  child: Text("Fechar"),
-                  onPressed: () => Navigator.of(context).pop(),
-                )
-              ],
-            ),
-          ); //showDialog
-        } finally {
-          //no final do processo tendo ou não cadastrado o
-          //produto ele desativa a tela de processando dados
-          setState(() => this._isLoading = false);
+        } else {
+          await providerProducts.updateProduct(product);
         }
-      }
-      //se o parametro ID estiver preenchido significa que estamso mechendo
-      //com uma atualização de dados então ele utiliza o metodo updateProduct
-      else {
-        providerProducts.updateProduct(product);
-        setState(() => this._isLoading = false);
 
-        //fecha a page atual depois de ter cadastrado o novo produto
+        //quando terminado o cadastro ele fecha a tela
         Navigator.of(context).pop();
+      } catch (erro) {
+        print("Foi");
+        //AlertDialog informando que houve um erro no cadastro
+        await showDialog<Null>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text("Ocorreu um erro!"),
+            content: Text("Ocorreu um erro para salvar o produto!"),
+            actions: [
+              FlatButton(
+                child: Text("Fechar"),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          ),
+        ); //showDialog
+      } finally {
+        //no final do processo tendo ou não cadastrado o
+        //produto ele desativa a tela de processando dados
+        setState(() => this._isLoading = false);
       }
     }
   }

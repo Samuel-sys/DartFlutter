@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -7,6 +8,8 @@ import 'package:shop/utils/app_routes.dart';
 class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
+
     //pegando um produto atravez do contex usando o Provider
     final Product product = Provider.of<Product>(
       context, //pasando o context atual do app
@@ -51,11 +54,30 @@ class ProductGridItem extends StatelessWidget {
             builder: (ctx, productConsumer, _) =>
                 //Favorite
                 IconButton(
-              icon: Icon(productConsumer.isFavorite
-                  ? Icons.favorite
-                  : Icons.favorite_border),
+              icon: Icon(
+                //quando e alterado o valor no produto a lista
+                //e atualizada assim mudando o icon
+                productConsumer.isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+              ),
               //tira e coloca no favorite
-              onPressed: () => productConsumer.toggleFavorite(),
+              onPressed:
+                  //metodo assíncrono onde que mostra um resultado otimista
+                  () async {
+                try {
+                  await productConsumer.toggleFavorite();
+                }
+                //caso de erro ele informa o usuario e sobre o erro e desfaz a ação
+                on HttpException catch (erro) {
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      content: Text(erro.toString()),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
               color: Theme.of(context).accentColor,
             ),
           ),

@@ -20,10 +20,19 @@ class ProducGrid extends StatelessWidget {
         : providerProducts.items; //lista com todos os items
 
     return GridView.builder(
+      //detalhes do Grid
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 3 / 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
       itemCount: products.length,
+
+      //Mostra todos os Produtos Cadastrados no Grid
       itemBuilder: (ctx, i) {
         return ChangeNotifierProvider.value(
-          //pasando o produto pelo Provaider
+          //pasando o produto pelo Provaider (ele e enviado atraves do context)
           value: products[i],
 
           //por ser um ChangeNotifierProvider.value ele não precisa ser passado
@@ -31,12 +40,6 @@ class ProducGrid extends StatelessWidget {
           child: ProductGridItem(),
         );
       },
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
     );
   }
 }
