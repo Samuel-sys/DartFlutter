@@ -6,11 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:shop/data/dummy_data.dart';
 import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/providers/product.dart';
+import 'package:shop/utils/constants.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = DUMMY_PRODUCTS;
   //Lembrese de por .json no final da _baseUrl quando for utilizar ela
-  final _baseUrl = 'https://flutter-shop-alencar.firebaseio.com/products';
+  final _baseUrl = '${Constants.BASE_API_URL}/products';
   /*
    * post = Insert (cadatrar)
    * patch = Update (alterar, lembre de passar o id como parametro) 

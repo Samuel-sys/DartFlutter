@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/providers/cart.dart';
+import 'package:shop/utils/constants.dart';
 
 class Order {
   final String id;
@@ -19,7 +20,7 @@ class Order {
 }
 
 class Orders with ChangeNotifier {
-  final _baseUrl = 'https://flutter-shop-alencar.firebaseio.com/orders';
+  final _baseUrl = '${Constants.BASE_API_URL}orders';
   List<Order> _items = [];
 
   //entrega uma copia da lista de pedidos feito

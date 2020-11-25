@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/exceptions/http_exception.dart';
+import 'package:shop/utils/constants.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -20,7 +21,7 @@ class Product with ChangeNotifier {
       @required this.imageUrl,
       this.isFavorite = false});
 
-  final _baseUrl = 'https://flutter-shop-alencar.firebaseio.com/products';
+  final _baseUrl = '${Constants.BASE_API_URL}products';
   /*
    * post = Insert (cadatrar)
    * patch = Update (alterar, lembre de passar o id como parametro) 
