@@ -47,15 +47,7 @@ class CartScreeen extends StatelessWidget {
                   Spacer(),
 
                   //evento comprar
-                  FlatButton(
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false)
-                          .addOrder(cart);
-                      cart.clear();
-                    },
-                    child: Text("COMPRAR"),
-                    textColor: Theme.of(context).primaryColor,
-                  )
+                  OrderButton(cart: cart)
                 ],
               ),
             ),
@@ -73,5 +65,45 @@ class CartScreeen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return this._isLoading
+        ? CircularProgressIndicator()
+        : FlatButton(
+            onPressed:
+                //so ativa o botão se tiver itens no carrinho
+                widget.cart.itemsCount == 0
+                    ? null
+                    : () async {
+                        setState(() => this._isLoading = !this._isLoading);
+
+                        await Provider.of<Orders>(context, listen: false)
+                            .addOrder(widget.cart);
+
+                        setState(() => this._isLoading = !this._isLoading);
+
+                        widget.cart.clear();
+                      },
+            child: Text("COMPRAR"),
+            textColor: Theme.of(context).primaryColor,
+          );
   }
 }
