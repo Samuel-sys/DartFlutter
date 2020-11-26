@@ -65,6 +65,8 @@ class _AuthCardState extends State<AuthCard> {
     Auth auth = Provider.of<Auth>(context, listen: false);
 
     try {
+      //controle de erro
+
       //se tiver no estado de Login efetua login
       if (_authMode == AuthMode.Login) {
         //o provider pega os dados e autentifica na API e assim faz o login
@@ -82,8 +84,10 @@ class _AuthCardState extends State<AuthCard> {
         );
       }
     } on AuthException catch (error) {
+      //erro em tempo de conexão com a API
       this._showErrorDialog(error.toString());
     } catch (error) {
+      //erro ainda não catalogado fora da are de acesso da API
       this._showErrorDialog("Ocoreu um erro inesperado");
     }
     //informa que os dados já foram processados
