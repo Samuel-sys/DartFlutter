@@ -12,6 +12,8 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard> {
 //
+  GlobalKey<FormState> _form = GlobalKey();
+
   //Enum que e responsavel por informa o estado da Page
   AuthMode _authMode = AuthMode.Login;
 
@@ -24,8 +26,44 @@ class _AuthCardState extends State<AuthCard> {
     'password': '',
   };
 
+  bool isLoading = false;
   void _submit() {
-    setState(() {});
+    //Se algum campo não estiver valido ele para a execução do bloco de comando
+    if (!this._form.currentState.validate()) {
+      return;
+    }
+
+    //informa que os dados estão sendo processados
+    setState(() {
+      isLoading = true;
+    });
+
+    //execulta todos os eventos de onSave no form
+    _form.currentState.save();
+
+    //se tiver no estado de Login efetua login
+    if (_authMode == AuthMode.Login) {
+      //Login
+    }
+    //no estado de registro cadastra o usuario
+    else {
+      //Registro
+    }
+
+    //informa que os dados já foram processados
+    setState(() {
+      this.isLoading = false;
+    });
+  }
+
+  void _switchAuthMode() {
+    setState(() {
+      this._authMode =
+          //condição
+          this._authMode == AuthMode.Login
+              ? AuthMode.Signup //true
+              : AuthMode.Login; //false
+    });
   }
 
   //Widget
@@ -40,10 +78,10 @@ class _AuthCardState extends State<AuthCard> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Container(
-        height: 320,
         width: 0.75 * deviceSize.width,
         padding: EdgeInsets.all(16),
         child: Form(
+          key: this._form,
           //corpo da Pag
           child: Column(
             children: <Widget>[
@@ -81,7 +119,6 @@ class _AuthCardState extends State<AuthCard> {
               if (_authMode == AuthMode.Signup)
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Confirmar Senha'),
-                  controller: this._passwordControler,
                   obscureText: true,
                   keyboardType: TextInputType.emailAddress,
                   validator: _authMode == AuthMode.Signup
@@ -92,29 +129,38 @@ class _AuthCardState extends State<AuthCard> {
                           return null;
                         }
                       : null,
-                  onSaved: (value) => _authData['password'] = value,
                 ),
 
               //espaçamento
               SizedBox(height: 20),
 
-              //cadastro/login
-              RaisedButton(
-                //estilo
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).primaryTextTheme.button.color,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 30.0,
-                  vertical: 8.0,
-                ),
-                child:
-                    Text(_authMode == AuthMode.Login ? 'ENTRAR' : 'REGISTRAR'),
+              if (this.isLoading)
+                CircularProgressIndicator()
+              else
+                //cadastro/login
+                RaisedButton(
+                  //estilo
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).primaryTextTheme.button.color,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 30.0,
+                    vertical: 8.0,
+                  ),
+                  child: Text(
+                      _authMode == AuthMode.Login ? 'ENTRAR' : 'REGISTRAR'),
 
-                //evento
-                onPressed: this._submit,
+                  //evento
+                  onPressed: this._submit,
+                ),
+
+              FlatButton(
+                onPressed: this._switchAuthMode,
+                child:
+                    Text(_authMode == AuthMode.Login ? 'REGISTRAR' : 'ENTRAR'),
+                textColor: Theme.of(context).primaryColor,
               )
             ],
           ),
