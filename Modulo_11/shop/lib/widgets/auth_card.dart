@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/providers/auth.dart';
+import '../exceptions/firebase_exceptions.dart';
 
 enum AuthMode {
   Signup, //Cadastro
@@ -13,6 +16,7 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
 //
   GlobalKey<FormState> _form = GlobalKey();
+  bool isLoading = false;
 
   //Enum que e responsavel por informa o estado da Page
   AuthMode _authMode = AuthMode.Login;
@@ -20,14 +24,31 @@ class _AuthCardState extends State<AuthCard> {
   //controler da Senha
   final _passwordControler = TextEditingController();
 
+  void _showErrorDialog(String msg) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Ocoreu um erro!"),
+        content: Text(msg),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Fechar"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   //Map responsavel por registra os dados para serem comparados pelo sistema
   final Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
 
-  bool isLoading = false;
-  void _submit() {
+  Future<void> _submit() async {
     //Se algum campo não estiver valido ele para a execução do bloco de comando
     if (!this._form.currentState.validate()) {
       return;
@@ -41,15 +62,30 @@ class _AuthCardState extends State<AuthCard> {
     //execulta todos os eventos de onSave no form
     _form.currentState.save();
 
-    //se tiver no estado de Login efetua login
-    if (_authMode == AuthMode.Login) {
-      //Login
-    }
-    //no estado de registro cadastra o usuario
-    else {
-      //Registro
-    }
+    Auth auth = Provider.of<Auth>(context, listen: false);
 
+    try {
+      //se tiver no estado de Login efetua login
+      if (_authMode == AuthMode.Login) {
+        //o provider pega os dados e autentifica na API e assim faz o login
+        await auth.login(
+          this._authData['email'],
+          this._authData['password'],
+        );
+      }
+      //no estado de registro cadastra o usuario
+      else {
+        //o provider pega os dados e registra o novo login
+        await auth.signup(
+          this._authData['email'],
+          this._authData['password'],
+        );
+      }
+    } on AuthException catch (error) {
+      this._showErrorDialog(error.toString());
+    } catch (error) {
+      this._showErrorDialog("Ocoreu um erro inesperado");
+    }
     //informa que os dados já foram processados
     setState(() {
       this.isLoading = false;
