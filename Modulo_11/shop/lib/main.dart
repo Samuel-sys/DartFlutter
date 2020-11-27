@@ -27,18 +27,22 @@ class MyApp extends StatelessWidget {
         //para atulizar a list com todos os dados dos produtos existentes no App
         ChangeNotifierProxyProvider<Auth, Products>(
           //Cria um Provider vazio para ser usado de parametro
-          create: (context) => new Products(null, []),
+          create: (context) => new Products(),
 
           //utiliza o provider de Products criado no proprio
           //ChangeNotifierProxyProvider alem do provider de Auth criado anteriormente
           update: (context, auth, previousProducts) {
-            return Products(auth.token, previousProducts.items);
+            return Products(
+              auth.token,
+              auth.userId,
+              previousProducts.items,
+            );
           },
         ),
 
         ChangeNotifierProxyProvider<Auth, Orders>(
           //Cria um Provider vazio para ser usado de parametro
-          create: (context) => new Orders(null, []),
+          create: (context) => new Orders(),
 
           //utiliza o provider de Products criado no proprio
           //ChangeNotifierProxyProvider alem do provider de Auth criado anteriormente

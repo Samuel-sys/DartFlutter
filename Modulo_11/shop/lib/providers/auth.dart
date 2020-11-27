@@ -6,11 +6,18 @@ import '../exceptions/firebase_exceptions.dart';
 
 class Auth with ChangeNotifier {
   String _token;
+  String _userId;
   DateTime _expiryDate;
 
   //informa se o usuario esta autenticado no sistema
   bool get isAuth {
     return token != null;
+  }
+
+  //informa o ID do usuario (o Id e registrado no momento da autenticação
+  //do user nesse metodo "_authenticate()" )
+  String get userId {
+    return this.isAuth ? this._userId : null;
   }
 
   String get token {
@@ -53,6 +60,9 @@ class Auth with ChangeNotifier {
     } else {
       //cadastra o token do usuario
       this._token = responseBody['idToken'];
+
+      //cadastra o id do usuario na API
+      this._userId = responseBody['localId'];
 
       //informa o momento em que esse token não sera mais valido
       this._expiryDate = DateTime.now().add(

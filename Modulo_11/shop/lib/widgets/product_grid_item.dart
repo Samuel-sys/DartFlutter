@@ -69,7 +69,7 @@ class ProductGridItem extends StatelessWidget {
                   //metodo assíncrono onde que mostra um resultado otimista
                   () async {
                 try {
-                  await productConsumer.toggleFavorite(auth.token);
+                  await productConsumer.toggleFavorite(auth.token, auth.userId);
                 }
                 //caso de erro ele informa o usuario e sobre o erro e desfaz a ação
                 on HttpException catch (erro) {

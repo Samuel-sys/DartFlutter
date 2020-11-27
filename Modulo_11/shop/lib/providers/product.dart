@@ -21,7 +21,7 @@ class Product with ChangeNotifier {
       @required this.imageUrl,
       this.isFavorite = false});
 
-  final _baseUrl = '${Constants.BASE_API_URL}products';
+  final _baseUrl = '${Constants.BASE_API_URL}userFavorites/';
   /*
    * post = Insert (cadatrar)
    * patch = Update (alterar, lembre de passar o id como parametro) 
@@ -29,7 +29,7 @@ class Product with ChangeNotifier {
    * delete = Delete (deleta, lembre de passar o id como parametro)
    */
 
-  Future<void> toggleFavorite(String token) async {
+  Future<void> toggleFavorite(String token, String userId) async {
     //inverte o valor da var isFavorite
     this.isFavorite = !this.isFavorite;
 
@@ -39,12 +39,10 @@ class Product with ChangeNotifier {
     try {
       //altera o isFavorite no webServer (API)
       final response = await http
-          .patch(
-            "$_baseUrl/$id.json?auth=$token",
+          .put(
+            "$_baseUrl$userId/$id.json?auth=$token",
             body: json.encode(
-              {
-                'isFavorite': this.isFavorite
-              }, //altera apenas o parametro isFavorite
+              this.isFavorite, //altera apenas o parametro isFavorite
             ),
           )
           .catchError(

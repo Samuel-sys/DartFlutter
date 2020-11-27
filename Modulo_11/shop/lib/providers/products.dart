@@ -10,8 +10,9 @@ import 'package:shop/utils/constants.dart';
 
 class Products with ChangeNotifier {
   String _token;
+  String _userId;
 
-  Products(this._token, this._items);
+  Products([this._token, this._userId, this._items = const []]);
 
   //lista de produtos da loja
   List<Product> _items = DUMMY_PRODUCTS;
@@ -22,24 +23,32 @@ class Products with ChangeNotifier {
     final response = await http.get("$_baseUrl.json?auth=$_token");
     Map<String, dynamic> data = json.decode(response.body);
 
+    //consulta na API a lista de produtos favoritos do usuario
+    final favResponse = await http.get(
+        "${Constants.BASE_API_URL}userFavorites/$_userId.json?auth=$_token");
+
+    //cria um Map com a lista de produtos favoritados do usuario
+    final favMap = json.decode(favResponse.body);
+
     if (data != null) {
       //para evitar a duplicação de itens no app limpa a lista anterior
       this._items.clear();
-      data.forEach(
-        (productId, productData) {
-          this._items.add(
-                Product(
-                  //o propio fire base (io) gera um codigo unico que pode ser usado como Id
-                  id: productId,
-                  title: productData['title'],
-                  description: productData['description'],
-                  price: productData['price'],
-                  imageUrl: productData['imageUrl'],
-                  isFavorite: productData['isFavorite'],
-                ),
-              );
-        },
-      );
+      data.forEach((productId, productData) {
+        //efetua o usuario não tiver uma lista de favorito ele retorna false
+        final isFavorite = favMap == null ? false : favMap[productId] ?? false;
+
+        this._items.add(
+              Product(
+                //o propio fire base (io) gera um codigo unico que pode ser usado como Id
+                id: productId,
+                title: productData['title'],
+                description: productData['description'],
+                price: productData['price'],
+                imageUrl: productData['imageUrl'],
+                isFavorite: isFavorite,
+              ),
+            );
+      });
       notifyListeners();
     }
   }
