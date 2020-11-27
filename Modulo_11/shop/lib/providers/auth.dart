@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ class Auth with ChangeNotifier {
   String _token;
   String _userId;
   DateTime _expiryDate;
+  Timer _logoutTimer;
 
   //informa se o usuario esta autenticado no sistema
   bool get isAuth {
@@ -70,6 +72,8 @@ class Auth with ChangeNotifier {
           seconds: int.parse(responseBody['expiresIn']),
         ),
       );
+
+      _autoLogout();
       //notifica o app da mundansa nos dados do sistema
       notifyListeners();
     }
@@ -86,5 +90,36 @@ class Auth with ChangeNotifier {
   //Efetua o login de um usuario
   Future<void> login(String email, String password) async {
     return this._authenticate(email, password, 'signInWithPassword');
+  }
+
+  void logout() {
+    this._token = null;
+    this._userId = null;
+    this._expiryDate = null;
+
+    //ele cancela o Timer
+    //que informa o momento em que a seção do usuário ser encerrada
+    if (this._logoutTimer != null) {
+      //cancela o timer se ele tiver ativo
+      this._logoutTimer.cancel();
+      //atribui o valor de null
+      this._logoutTimer = null;
+    }
+
+    notifyListeners();
+  }
+
+  void _autoLogout() {
+    //se o timer estive ativado ele cancela o Timer
+    //que informa o momento em que a seção do usuário ser encerrada
+    if (this._logoutTimer != null) {
+      //cancela o timer se ele tiver ativo
+      this._logoutTimer.cancel();
+    }
+    //cria uma data de parametro para informa daqui quanto tempo o metodo sera chamdo
+    final timeToLogout = this._expiryDate.difference(DateTime.now()).inSeconds;
+
+    //ele sera execultado depois que o tempo estipulado for alcançado
+    this._logoutTimer = Timer(Duration(seconds: timeToLogout), logout);
   }
 }

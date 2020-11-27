@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/providers/auth.dart';
 import 'package:shop/utils/app_routes.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -45,7 +47,20 @@ class AppDrawer extends StatelessWidget {
                 Divider(),
               ],
             ),
-          )
+          ),
+
+          //Logout
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Sair'),
+            onTap: () {
+              //Limpa os dados do usuario do App (token, userId e expiryDate)
+              Provider.of<Auth>(context, listen: false).logout();
+
+              //se tiver em uma pagina que não seja a Home ele envia para lá
+              Navigator.of(context).pushReplacementNamed(AppRoutes.AUTH_HOME);
+            },
+          ),
         ],
       ),
     );
