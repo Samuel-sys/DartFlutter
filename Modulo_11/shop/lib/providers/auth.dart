@@ -5,6 +5,24 @@ import 'package:http/http.dart' as http;
 import '../exceptions/firebase_exceptions.dart';
 
 class Auth with ChangeNotifier {
+  String _token;
+  DateTime _expiryDate;
+
+  //informa se o usuario esta autenticado no sistema
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (this._token != null &&
+        this._expiryDate != null &&
+        this._expiryDate.isAfter(DateTime.now())) {
+      return this._token;
+    } else {
+      return null;
+    }
+  }
+
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     //chave da API da Web
@@ -29,7 +47,21 @@ class Auth with ChangeNotifier {
 
     //se tiver um erro informa ao APP o motivo do erro atraveis do AuthException
     if (responseBody['error'] != null) {
+      //informa ao App qual erro ocorreu e informa qual erro foi criado
+      //atraves do catalogo do sistema
       throw AuthException(responseBody['error']['message']);
+    } else {
+      //cadastra o token do usuario
+      this._token = responseBody['idToken'];
+
+      //informa o momento em que esse token não sera mais valido
+      this._expiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseBody['expiresIn']),
+        ),
+      );
+      //notifica o app da mundansa nos dados do sistema
+      notifyListeners();
     }
 
     //retorna o resultado para a API

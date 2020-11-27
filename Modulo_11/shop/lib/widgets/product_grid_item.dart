@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/auth.dart';
 import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/product.dart';
@@ -11,13 +12,15 @@ class ProductGridItem extends StatelessWidget {
     final scaffold = Scaffold.of(context);
 
     //pegando um produto atravez do contex usando o Provider
-    final Product product = Provider.of<Product>(
+    final Product product = Provider.of(
       context, //pasando o context atual do app
       listen:
           false, //informa se houver algum evento relacionado a esse provider
     );
 
-    final Cart cart = Provider.of<Cart>(context, listen: false);
+    final Cart cart = Provider.of(context, listen: false);
+
+    final Auth auth = Provider.of(context);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -66,7 +69,7 @@ class ProductGridItem extends StatelessWidget {
                   //metodo assíncrono onde que mostra um resultado otimista
                   () async {
                 try {
-                  await productConsumer.toggleFavorite();
+                  await productConsumer.toggleFavorite(auth.token);
                 }
                 //caso de erro ele informa o usuario e sobre o erro e desfaz a ação
                 on HttpException catch (erro) {

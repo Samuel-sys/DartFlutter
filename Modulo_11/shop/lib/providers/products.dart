@@ -9,12 +9,17 @@ import 'package:shop/providers/product.dart';
 import 'package:shop/utils/constants.dart';
 
 class Products with ChangeNotifier {
+  String _token;
+
+  Products(this._token, this._items);
+
+  //lista de produtos da loja
   List<Product> _items = DUMMY_PRODUCTS;
   //Lembrese de por .json no final da _baseUrl quando for utilizar ela
   final _baseUrl = '${Constants.BASE_API_URL}/products';
 
   Future<void> loadProducts() async {
-    final response = await http.get("$_baseUrl.json");
+    final response = await http.get("$_baseUrl.json?auth=$_token");
     Map<String, dynamic> data = json.decode(response.body);
 
     if (data != null) {
@@ -51,7 +56,7 @@ class Products with ChangeNotifier {
   Future<Null> addProduct(Product newProduct) async {
     //o await e usado para fazer com que o sistema espere o resultado
     //do Future e depositar ele na variavel para depois continuar o codigo
-    var response = await http.post("$_baseUrl.json",
+    var response = await http.post("$_baseUrl.json?auth=$_token",
         body: json.encode(
           {
             'title': newProduct.title,
@@ -85,7 +90,7 @@ class Products with ChangeNotifier {
 
     if (index >= 0) {
       await http.patch(
-        "$_baseUrl/${product.id}.json",
+        "$_baseUrl/${product.id}.json?auth=$_token",
         body: json.encode(
           {
             'title': product.title,
@@ -110,7 +115,8 @@ class Products with ChangeNotifier {
       this._items.remove(product);
       notifyListeners(); //atualiza a list do app
 
-      final response = await http.delete("$_baseUrl/${product.id}");
+      final response =
+          await http.delete("$_baseUrl/${product.id}.json?auth=$_token");
 
       if (response.statusCode >= 400) {
         //add o produto qua não pode ser cadastrado

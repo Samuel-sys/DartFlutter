@@ -29,7 +29,7 @@ class Product with ChangeNotifier {
    * delete = Delete (deleta, lembre de passar o id como parametro)
    */
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String token) async {
     //inverte o valor da var isFavorite
     this.isFavorite = !this.isFavorite;
 
@@ -40,7 +40,7 @@ class Product with ChangeNotifier {
       //altera o isFavorite no webServer (API)
       final response = await http
           .patch(
-            "$_baseUrl/$id.json",
+            "$_baseUrl/$id.json?auth=$token",
             body: json.encode(
               {
                 'isFavorite': this.isFavorite

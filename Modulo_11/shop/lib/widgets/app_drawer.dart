@@ -5,7 +5,7 @@ class AppDrawer extends StatelessWidget {
   //Lista de paginas do App com os dados necessários para o ListTile
   final List<Map<String, dynamic>> screens = [
     {
-      'screen': AppRoutes.HOME,
+      'screen': AppRoutes.AUTH_HOME,
       'icon': Icons.shop,
       'title': 'Loja',
     },

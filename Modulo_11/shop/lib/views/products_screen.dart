@@ -7,7 +7,7 @@ import 'package:shop/widgets/product_item.dart';
 
 class ProductsScreen extends StatelessWidget {
   refreshProducts(BuildContext context) {
-    return Provider.of<Products>(context, listen: true).loadProducts();
+    return Provider.of<Products>(context, listen: false).loadProducts();
   }
 
   @override

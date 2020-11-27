@@ -123,7 +123,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         //quando terminado o cadastro ele fecha a tela
         Navigator.of(context).pop();
       } catch (erro) {
-        print("Foi");
         //AlertDialog informando que houve um erro no cadastro
         await showDialog<Null>(
           context: context,
