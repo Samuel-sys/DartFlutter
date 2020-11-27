@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           //utiliza o provider de Products criado no proprio
           //ChangeNotifierProxyProvider alem do provider de Auth criado anteriormente
           update: (context, auth, previousOrders) {
-            return Orders(auth.token, previousOrders.items);
+            return Orders(auth.token, auth.userId, previousOrders.items);
           },
         ),
 

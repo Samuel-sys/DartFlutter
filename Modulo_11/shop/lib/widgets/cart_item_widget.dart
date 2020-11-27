@@ -69,7 +69,7 @@ class CartItemWidget extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text("${this.cartItem.price}"),
+                  child: Text("${this.cartItem.price.toStringAsFixed(2)}"),
                 ),
               ),
             ),
@@ -81,8 +81,8 @@ class CartItemWidget extends StatelessWidget {
             trailing: Text("${cartItem.quantity}x"),
 
             //valor total a ser pago
-            subtitle:
-                Text("R\$${this.cartItem.price * this.cartItem.quantity}"),
+            subtitle: Text(
+                "R\$${(this.cartItem.price * this.cartItem.quantity).toStringAsFixed(2)}"),
           ),
         ),
       ),
