@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop/data/dummy_data.dart';
 import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/utils/constants.dart';
@@ -15,7 +14,7 @@ class Products with ChangeNotifier {
   Products([this._token, this._userId, this._items = const []]);
 
   //lista de produtos da loja
-  List<Product> _items = DUMMY_PRODUCTS;
+  List<Product> _items = [];
   //Lembrese de por .json no final da _baseUrl quando for utilizar ela
   final _baseUrl = '${Constants.BASE_API_URL}/products';
 
